@@ -10,13 +10,6 @@ import static org.junit.Assert.assertTrue;
 public class SodukuModelTest {
 
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
-
-
-
-    @Test
     public void soduku_isCorrect(){
         Soduku soduku = new Soduku();
         System.out.println(soduku);
