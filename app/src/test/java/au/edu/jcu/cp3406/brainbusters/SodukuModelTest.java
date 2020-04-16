@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 public class SodukuModelTest {
 
     @Test
-    public void soduku_isCorrect(){
+    public void soduku(){
         Soduku soduku = new Soduku();
         System.out.println(soduku);
         assertTrue(soduku.isValid());

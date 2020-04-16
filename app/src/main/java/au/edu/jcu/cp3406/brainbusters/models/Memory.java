@@ -17,55 +17,31 @@ public class Memory {
     ArrayList<Card> cards;
     Card guessCard;
 
-    enum Rank{
-        Two,
-        Three,
-        Four,
-        Five,
-        Six,
-        Seven,
-        Eight,
-        Nine,
-        Ten,
-        JACK,
-        QUEEN,
-        KING,
-        ACE
-    }
 
-    enum Suit{
-        Clubs,
-        Diamonds,
-        Spades,
-        Hearts
-    }
 
 
     public Memory(){
+        guessCard = null;
         cards = new ArrayList<>();
         for(int i =0; i<52;i++){
             cards.add(new Card(i));
-            if(i>52/2){
-                cards.get(i).pair = cards.get(i-13*2);
-                cards.get(i-13*2).pair = cards.get(i);
-            }
         }
     }
 
-    private void sortCards(){
+    public void sortCards(){
         Collections.sort(cards);
     }
 
-    private void shuffleCards(){
+    public void shuffleCards(){
         Collections.shuffle(cards);
     }
 
-    void selectCard(Card card){
+    public void selectCard(Card card){
         if(card != guessCard && !card.isPaired()){
             if(guessCard == null){
                 guessCard = card;
             }else{
-                if(card.pair == guessCard || guessCard.pair == card){
+                if(card.compareTo(guessCard) == 0){
                     card.paired = true;
                     guessCard.paired = true;
                 }
@@ -74,62 +50,14 @@ public class Memory {
         }
     }
 
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
 
+    public Card getCard(int id){
+        return cards.get(id);
+    }
 }
 
 
-class Card implements Comparable<Card>{
-
-    boolean paired;
-    int id;
-    int cardImage;
-    Uri uri;
-    Card pair;
-
-    Memory.Suit suit;
-    Memory.Rank rank;
-
-    Card(int id){
-        this.id = id;
-        paired = false;
-        uri = Uri.parse("@drawable/c"+id);
-        cardImage = R.drawable.back;
-        rank = Memory.Rank.values()[id%13];
-        suit = Memory.Suit.values()[(int) id/13];
-    }
-
-
-    @NonNull
-    @Override
-    public String toString() {
-        return rank.toString() + " Of " + suit.toString();
-    }
-
-    @Override
-    public int compareTo(Card card) {
-        return Integer.compare(this.id, card.id);
-    }
-
-    public Memory.Suit getSuit() {
-        return suit;
-    }
-
-    public Memory.Rank getRank() {
-        return rank;
-    }
-
-    public Uri getUri() {
-        return uri;
-    }
-
-    public Card getPair() {
-        return pair;
-    }
-
-    public boolean isPaired() {
-        return paired;
-    }
-
-
-}
 
