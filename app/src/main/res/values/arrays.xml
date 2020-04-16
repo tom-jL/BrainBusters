@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="suits">
+        <item>Clubs</item>
+        <item>Diamonds</item>
+        <item>Spades</item>
+        <item>Hearts</item>
+    </string-array>
+    <string-array name="royals">
+        <item>Jack</item>
+        <item>Queen</item>
+        <item>King</item>
+        <item>Ace</item>
+    </string-array>
+</resources>
