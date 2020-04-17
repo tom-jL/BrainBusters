@@ -62,6 +62,10 @@ public class Soduku {
 
     }
 
+    public int[][] getGame() {
+        return game;
+    }
+
 
     public int[] get1DArray() {
         int[] gameArray = new int[9*9];
@@ -95,11 +99,15 @@ public class Soduku {
         }
     }
 
-    private int[] getRow(int index) {
+    public int getCell(int row, int col){
+        return game[row][col];
+    }
+
+    public int[] getRow(int index) {
         return game[index];
     }
 
-    private int[] getColumn(int index) {
+    public int[] getColumn(int index) {
         int[] col = new int[9];
         for (int i = 0; i < 9; i++) {
             col[i] = game[i][index];
@@ -107,7 +115,7 @@ public class Soduku {
         return col;
     }
 
-    private int[] getBlock(int index) {
+    public int[] getBlock(int index) {
         int[] block = new int[9];
         int blockColumn = (index % 3) * 3;
         int blockRow = index < 3 ? 0 : index < 6 ? 3 : index < 9 ? 6 : 0;
