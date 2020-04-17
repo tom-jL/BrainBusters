@@ -1,6 +1,5 @@
 package au.edu.jcu.cp3406.brainbusters.models;
 
-import androidx.annotation.NonNull;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -81,7 +80,6 @@ public class Minesweeper {
         return block;
     }
 
-    @NonNull
     @Override
     public String toString() {
         StringBuilder gridArray = new StringBuilder();

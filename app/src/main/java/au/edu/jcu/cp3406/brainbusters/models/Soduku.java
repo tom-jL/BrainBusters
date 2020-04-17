@@ -62,6 +62,25 @@ public class Soduku {
 
     }
 
+
+    public int[] get1DArray() {
+        int[] gameArray = new int[9*9];
+        int copyPos = 0;
+        for(int[] row : game){
+            System.arraycopy(row, 0,gameArray,copyPos,row.length);
+            copyPos += row.length;
+        }
+        return gameArray;
+    }
+
+    public void set1DArray(int[] gameArray) {
+        for(int row = 0; row < 9; row++){
+            System.arraycopy(gameArray, row * 9, game[row], 0, 9);
+        }
+    }
+
+
+
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
         int given = 9 * 9 - difficulty.ordinal() * 10;
