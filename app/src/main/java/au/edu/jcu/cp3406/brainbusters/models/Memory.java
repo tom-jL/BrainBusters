@@ -20,12 +20,32 @@ public class Memory {
 
 
 
+
     public Memory(){
         guessCard = null;
         cards = new ArrayList<>();
         for(int i =0; i<52;i++){
             cards.add(new Card(i));
         }
+    }
+
+
+    public boolean[] saveState(){
+        boolean[] state = new boolean[52];
+        for(int i =0; i <state.length; i++){
+            state[cards.get(i).id] = cards.get(i).paired;
+        }
+        return state;
+    }
+
+    public void loadState(boolean[] state) {
+        cards = new ArrayList<>();
+        for(int i =0; i <state.length; i++){
+            Card card = new Card(i);
+            card.paired = state[i];
+            cards.add(new Card(i));
+        }
+
     }
 
     public void sortCards(){
@@ -57,6 +77,8 @@ public class Memory {
     public Card getCard(int id){
         return cards.get(id);
     }
+
+
 }
 
 

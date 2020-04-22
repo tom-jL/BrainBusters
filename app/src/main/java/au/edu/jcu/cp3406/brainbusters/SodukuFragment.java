@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
@@ -29,11 +30,13 @@ public class SodukuFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        soduku = new Soduku(Soduku.Difficulty.easy);
         if (savedInstanceState != null){
-            soduku.set1DArray(savedInstanceState.getIntArray("game"));
+            soduku.loadState(savedInstanceState.getIntArray("state"));
+        } else {
+            soduku.newGame();
         }
-        soduku = new Soduku();
-        soduku.setDifficulty(Soduku.Difficulty.easy);
+
 
     }
 
@@ -54,13 +57,13 @@ public class SodukuFragment extends Fragment {
         }
     }
 
-    void buildGrid(GridLayout sodukuGrid){
+    void buildGrid(GridLayout sodukuGrid) {
         sodukuGrid.removeAllViewsInLayout();
         for(int row = 0; row < soduku.getGame().length; row++){
             for(int col = 0; col < soduku.getRow(row).length; col++){
                 if(soduku.getCell(row, col) == 0){
                     //TODO: Make button for number selection
-                    TextView numberView = new TextView(sodukuGrid.getContext());
+                    Button numberView = new Button(sodukuGrid.getContext());
                     numberView.setText(String.valueOf(soduku.getCell(row, col)));
                     GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                     params.width = 80;
@@ -69,6 +72,7 @@ public class SodukuFragment extends Fragment {
                     params.rowSpec = GridLayout.spec(row);
                     numberView.setLayoutParams(params);
                     sodukuGrid.addView(numberView);
+
                 }else{
                     TextView numberView = new TextView(sodukuGrid.getContext());
                     numberView.setText(String.valueOf(soduku.getCell(row, col)));
@@ -90,7 +94,7 @@ public class SodukuFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putIntArray("game",soduku.get1DArray());
+        outState.putIntArray("state",soduku.saveState());
     }
 
 }

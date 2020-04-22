@@ -19,12 +19,10 @@ public class Soduku {
     }
 
     public Soduku() {
-        newGame();
     }
 
     public Soduku(Difficulty difficulty) {
-        newGame();
-        setDifficulty(difficulty);
+        this.difficulty = difficulty;
     }
 
     public void newGame() {
@@ -59,7 +57,7 @@ public class Soduku {
                 gameFound = true;
             }
         }
-
+        setDifficulty(difficulty);
     }
 
     public int[][] getGame() {
@@ -67,7 +65,7 @@ public class Soduku {
     }
 
 
-    public int[] get1DArray() {
+    public int[] saveState() {
         int[] gameArray = new int[9*9];
         int copyPos = 0;
         for(int[] row : game){
@@ -77,10 +75,11 @@ public class Soduku {
         return gameArray;
     }
 
-    public void set1DArray(int[] gameArray) {
+    public void loadState(int[] gameArray) {
         for(int row = 0; row < 9; row++){
             System.arraycopy(gameArray, row * 9, game[row], 0, 9);
         }
+        setDifficulty(this.difficulty);
     }
 
 

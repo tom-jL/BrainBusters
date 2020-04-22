@@ -1,20 +1,25 @@
 package au.edu.jcu.cp3406.brainbusters.models;
 
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatDrawableManager;
+import androidx.core.content.res.ResourcesCompat;
 
 import au.edu.jcu.cp3406.brainbusters.R;
 
 public class Card implements Comparable<Card>{
 
     boolean paired;
+
     int id;
-    int cardImage;
-    String uri;
     Suit suit;
     Rank rank;
+    String fileName;
 
     public enum Rank{
         Two,
@@ -44,12 +49,25 @@ public class Card implements Comparable<Card>{
     Card(int id){
         this.id = id;
         paired = false;
-        uri = "@drawable/c"+id;
-        cardImage = R.drawable.back;
         rank = Rank.values()[id%13];
         suit = Suit.values()[(int) id/13];
+        setFileName();
     }
 
+    private void setFileName() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if(id%13 < 10)
+            stringBuilder.append(id%13);
+        else
+            stringBuilder.append(rank.toString().toUpperCase().substring(0,0));
+        stringBuilder.append(suit.toString().toUpperCase().substring(0,0));
+
+        fileName = stringBuilder.toString();
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
 
     @NonNull
     @Override
