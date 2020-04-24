@@ -1,9 +1,11 @@
 package au.edu.jcu.cp3406.brainbusters.models;
 
+import android.util.AttributeSet;
+
 import androidx.annotation.NonNull;
 
 
-public class Card implements Comparable<Card>{
+public class Card implements Comparable<Card> {
 
     boolean paired;
 
@@ -85,5 +87,7 @@ public class Card implements Comparable<Card>{
         return paired;
     }
 
-
+    public void setPaired(boolean paired) {
+        this.paired = paired;
+    }
 }

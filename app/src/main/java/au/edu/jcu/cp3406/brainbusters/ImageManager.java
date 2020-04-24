@@ -18,11 +18,12 @@ public class ImageManager{
     ImageManager(AssetManager assetManager, String color){
         this.assetManager = assetManager;
         this.color = color;
+
+
     }
 
-
     Bitmap getCardImage(Card card){
-        String fileName = card.isPaired() ? color + "_back.png" : card.getFileName()+".png";
+        String fileName = card.isPaired() ? card.getFileName()+".png" : color + "_back.png";
         InputStream stream = null;
         try {
             stream = assetManager.open("cards/" + fileName);
@@ -32,4 +33,31 @@ public class ImageManager{
         }
         return null;
     }
+
+
+    Bitmap getCardFace(Card card){
+        String fileName = card.getFileName()+".png";
+        InputStream stream = null;
+        try {
+            stream = assetManager.open("cards/" + fileName);
+            return BitmapFactory.decodeStream(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    Bitmap getCardBack(){
+        String fileName =  color + "_back.png";
+                InputStream stream = null;
+        try {
+            stream = assetManager.open("cards/" + fileName);
+            return BitmapFactory.decodeStream(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

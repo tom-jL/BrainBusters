@@ -9,18 +9,10 @@ import java.util.Collections;
 public class Memory {
 
     ArrayList<Card> cards;
-    Card guessCard;
 
     public static final int DECK_SIZE = 26;
 
-
-
-
-
-
-
     public Memory(){
-        guessCard = null;
         cards = new ArrayList<>();
         for(int i =0; i<DECK_SIZE;i++){
             cards.add(new Card(i*52/DECK_SIZE));
@@ -54,19 +46,6 @@ public class Memory {
         Collections.shuffle(cards);
     }
 
-    public void selectCard(Card card){
-        if(card != guessCard && !card.isPaired()){
-            if(guessCard == null){
-                guessCard = card;
-            }else{
-                if(card.compareTo(guessCard) == 0){
-                    card.paired = true;
-                    guessCard.paired = true;
-                }
-                guessCard = null;
-            }
-        }
-    }
 
     public ArrayList<Card> getCards() {
         return cards;
