@@ -11,6 +11,10 @@ public class Memory {
     ArrayList<Card> cards;
     Card guessCard;
 
+    public static final int DECK_SIZE = 26;
+
+
+
 
 
 
@@ -18,14 +22,14 @@ public class Memory {
     public Memory(){
         guessCard = null;
         cards = new ArrayList<>();
-        for(int i =0; i<52;i++){
-            cards.add(new Card(i));
+        for(int i =0; i<DECK_SIZE;i++){
+            cards.add(new Card(i*52/DECK_SIZE));
         }
     }
 
 
     public boolean[] saveState(){
-        boolean[] state = new boolean[52];
+        boolean[] state = new boolean[DECK_SIZE];
         for(int i =0; i <state.length; i++){
             state[cards.get(i).id] = cards.get(i).paired;
         }

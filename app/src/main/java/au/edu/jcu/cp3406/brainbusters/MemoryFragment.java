@@ -68,7 +68,7 @@ public class MemoryFragment extends Fragment {
         float screenHeight = (float) ((float)displayMetrics.heightPixels * 0.8);
         float screenRatio = screenHeight / screenWidth;
         float screenArea = screenWidth * screenHeight;
-        float cardArea = (float) ((screenArea)/(26));
+        float cardArea = (float) ((screenArea)/(Memory.DECK_SIZE));
         float cardHeight = (float)Math.sqrt(screenRatio * cardArea);
         float cardWidth = cardArea/cardHeight;
 
@@ -77,7 +77,6 @@ public class MemoryFragment extends Fragment {
         int index = 0;
         for(int row = 0; row < rowSize && index < colSize*rowSize; row++){
             for(int col = 0; col < colSize && index < colSize*rowSize; col++){
-
                 ImageView cardView = new ImageView(memoryGrid.getContext());
                 cardView.setImageBitmap(imageManager.getCardImage(memory.getCard(index)));
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
