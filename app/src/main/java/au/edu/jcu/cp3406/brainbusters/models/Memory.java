@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-
 public class Memory {
 
     ArrayList<Card> cards;

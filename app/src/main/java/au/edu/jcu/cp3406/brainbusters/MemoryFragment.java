@@ -25,7 +25,6 @@ public class MemoryFragment extends Fragment {
 
     Memory memory;
     ImageManager imageManager;
-    String color = "gray";
     GridLayout memoryGrid;
     int colSize;
     int rowSize;
@@ -80,13 +79,13 @@ public class MemoryFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null){
-            imageManager = new ImageManager(view.getContext().getAssets(), color);
+            imageManager = new ImageManager(view.getContext().getAssets());
             memoryGrid = (GridLayout) view.findViewById(R.id.memoryGrid);
-            buildGrid(memoryGrid);
+            buildGrid();
         }
     }
 
-    void buildGrid(final GridLayout memoryGrid) {
+    void buildGrid() {
         memoryGrid.removeAllViewsInLayout();
         int index = 0;
         for(int row = 0; row < rowSize && index < colSize*rowSize; row++){

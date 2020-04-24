@@ -1,6 +1,7 @@
 package au.edu.jcu.cp3406.brainbusters.models;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -9,7 +10,6 @@ public class Minesweeper {
     private Random random = new Random();
     private int[][] grid;
     private Difficulty difficulty;
-
 
 
     public enum Difficulty {
@@ -50,6 +50,29 @@ public class Minesweeper {
         }
 
     }
+
+    public int[][] getGrid() {
+        return grid;
+    }
+
+
+    public int[] saveState() {
+        int[] gameArray = new int[grid.length*grid[0].length];
+        int copyPos = 0;
+        for(int[] row : grid){
+                System.arraycopy(row, 0, gameArray, copyPos, row.length);
+                copyPos += row.length;
+
+        }
+        return gameArray;
+    }
+
+    public void loadState(int[] gameArray) {
+        for(int row = 0; row < grid.length; row++){
+            System.arraycopy(gameArray, row * grid.length, grid[row], 0, grid.length);
+        }
+    }
+
 
 
     private int getBombCount(int[] block){

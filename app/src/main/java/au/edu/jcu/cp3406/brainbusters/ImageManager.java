@@ -13,17 +13,27 @@ import au.edu.jcu.cp3406.brainbusters.models.Card;
 public class ImageManager{
 
     private AssetManager assetManager;
-    private String color;
 
-    ImageManager(AssetManager assetManager, String color){
+
+    ImageManager(AssetManager assetManager){
         this.assetManager = assetManager;
-        this.color = color;
-
-
     }
 
+    Bitmap getMineImage(int id){
+        InputStream stream = null;
+        try {
+            stream = assetManager.open("mines/" + id + ".png");
+            return BitmapFactory.decodeStream(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
     Bitmap getCardImage(Card card){
-        String fileName = card.isPaired() ? card.getFileName()+".png" : color + "_back.png";
+        String fileName = card.isPaired() ? card.getFileName()+".png" : "blue_back.png";
         InputStream stream = null;
         try {
             stream = assetManager.open("cards/" + fileName);
@@ -48,7 +58,7 @@ public class ImageManager{
     }
 
     Bitmap getCardBack(){
-        String fileName =  color + "_back.png";
+        String fileName =  "blue_back.png";
                 InputStream stream = null;
         try {
             stream = assetManager.open("cards/" + fileName);
@@ -60,4 +70,14 @@ public class ImageManager{
     }
 
 
+    public Bitmap getBlankMine() {
+        InputStream stream = null;
+        try {
+            stream = assetManager.open("mines/" + 10 + ".png");
+            return BitmapFactory.decodeStream(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
