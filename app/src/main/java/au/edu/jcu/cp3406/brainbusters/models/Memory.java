@@ -19,20 +19,29 @@ public class Memory {
     }
 
 
-    public boolean[] saveState(){
-        boolean[] state = new boolean[DECK_SIZE];
+    public int[] saveOrderState(){
+        int[] state = new int[DECK_SIZE];
         for(int i =0; i <state.length; i++){
-            state[cards.get(i).id] = cards.get(i).paired;
+            Card card = getCard(i);
+            state[i] = card.id;
         }
         return state;
     }
 
-    public void loadState(boolean[] state) {
-        cards = new ArrayList<>();
+    public boolean[] savePairState(){
+        boolean[] state = new boolean[DECK_SIZE];
         for(int i =0; i <state.length; i++){
-            Card card = new Card(i);
-            card.paired = state[i];
-            cards.add(new Card(i));
+            Card card = getCard(i);
+            state[i] = card.paired;
+        }
+        return state;
+    }
+
+    public void loadState(int[] orderState, boolean[] pairedState) {
+        cards = new ArrayList<>();
+        for(int i =0; i <DECK_SIZE; i++){
+            Card card = new Card(orderState[i], pairedState[i]);
+            cards.add(card);
         }
 
     }

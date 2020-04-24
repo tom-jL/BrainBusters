@@ -47,7 +47,7 @@ public class MemoryFragment extends Fragment {
         guessCard = null;
         memory = new Memory();
         if (savedInstanceState != null){
-            memory.loadState(savedInstanceState.getBooleanArray("state"));
+            memory.loadState(savedInstanceState.getIntArray("orderState"), savedInstanceState.getBooleanArray("pairState"));
         } else {
             memory.shuffleCards();
         }
@@ -144,6 +144,7 @@ public class MemoryFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBooleanArray("state",memory.saveState());
+        outState.putIntArray("state",memory.saveOrderState());
+        outState.putBooleanArray("state",memory.savePairState());
     }
 }

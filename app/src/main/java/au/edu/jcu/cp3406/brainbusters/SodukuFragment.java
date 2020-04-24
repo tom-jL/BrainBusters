@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import au.edu.jcu.cp3406.brainbusters.models.Soduku;
 public class SodukuFragment extends Fragment {
 
     Soduku soduku;
+    float numberViewWidth;
 
     public SodukuFragment() {
         // Required empty public constructor
@@ -36,6 +38,10 @@ public class SodukuFragment extends Fragment {
         } else {
             soduku.newGame();
         }
+
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float screenWidth = (float)displayMetrics.widthPixels;
+        numberViewWidth = screenWidth/9;
 
 
     }
@@ -61,29 +67,25 @@ public class SodukuFragment extends Fragment {
         sodukuGrid.removeAllViewsInLayout();
         for(int row = 0; row < soduku.getGame().length; row++){
             for(int col = 0; col < soduku.getRow(row).length; col++){
+                Button numberView = new Button(sodukuGrid.getContext());
                 if(soduku.getCell(row, col) == 0){
-                    //TODO: Make button for number selection
-                    Button numberView = new Button(sodukuGrid.getContext());
-                    numberView.setText(String.valueOf(soduku.getCell(row, col)));
-                    GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-                    params.width = 80;
-                    params.height = 80;
-                    params.columnSpec = GridLayout.spec(col);
-                    params.rowSpec = GridLayout.spec(row);
-                    numberView.setLayoutParams(params);
-                    sodukuGrid.addView(numberView);
+                    numberView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
+                        }
+                    });
                 }else{
-                    TextView numberView = new TextView(sodukuGrid.getContext());
                     numberView.setText(String.valueOf(soduku.getCell(row, col)));
-                    GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-                    params.width = 80;
-                    params.height = 80;
-                    params.columnSpec = GridLayout.spec(col);
-                    params.rowSpec = GridLayout.spec(row);
-                    numberView.setLayoutParams(params);
-                    sodukuGrid.addView(numberView);
+                    numberView.setClickable(false);
                 }
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+                params.width = (int) numberViewWidth;
+                params.height = (int) numberViewWidth;
+                params.columnSpec = GridLayout.spec(col);
+                params.rowSpec = GridLayout.spec(row);
+                numberView.setLayoutParams(params);
+                sodukuGrid.addView(numberView);
             }
         }
     }

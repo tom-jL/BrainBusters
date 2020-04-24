@@ -14,6 +14,7 @@ public class Card implements Comparable<Card> {
     Rank rank;
     String fileName;
 
+
     public enum Rank{
         Two,
         Three,
@@ -46,6 +47,15 @@ public class Card implements Comparable<Card> {
         suit = Suit.values()[(int) id/13];
         setFileName();
     }
+
+    public Card(int id, boolean paired) {
+        this.id = id;
+        this.paired = paired;
+        rank = Rank.values()[id%13];
+        suit = Suit.values()[(int) id/13];
+        setFileName();
+    }
+
 
     private void setFileName() {
         StringBuilder stringBuilder = new StringBuilder();
