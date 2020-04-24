@@ -1,15 +1,9 @@
 package au.edu.jcu.cp3406.brainbusters.models;
 
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
-import au.edu.jcu.cp3406.brainbusters.R;
 
 
 public class Memory {
@@ -74,8 +68,8 @@ public class Memory {
         return cards;
     }
 
-    public Card getCard(int id){
-        return cards.get(id);
+    public Card getCard(int index){
+        return cards.get(index);
     }
 
 

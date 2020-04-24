@@ -3,11 +3,10 @@ package au.edu.jcu.cp3406.brainbusters;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+
 
 import au.edu.jcu.cp3406.brainbusters.models.Card;
 
@@ -23,7 +22,7 @@ public class ImageManager{
 
 
     Bitmap getCardImage(Card card){
-        String fileName = card.isPaired() ? card.getFileName() : color + "_back.png";
+        String fileName = card.isPaired() ? color + "_back.png" : card.getFileName()+".png";
         InputStream stream = null;
         try {
             stream = assetManager.open("cards/" + fileName);

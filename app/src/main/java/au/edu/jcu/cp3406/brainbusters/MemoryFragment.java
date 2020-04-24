@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,25 +63,32 @@ public class MemoryFragment extends Fragment {
 
     void buildGrid(GridLayout memoryGrid) {
         memoryGrid.removeAllViewsInLayout();
-        int col = 0;
-        int row = 0;
-        for(Card card : memory.getCards()){
-            if (col > 52/4){
-                row++;
-                col = 0;
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float screenWidth = (float)displayMetrics.widthPixels;
+        float screenHeight = (float) ((float)displayMetrics.heightPixels * 0.8);
+        float screenRatio = screenHeight / screenWidth;
+        float screenArea = screenWidth * screenHeight;
+        float cardArea = (float) ((screenArea)/(26));
+        float cardHeight = (float)Math.sqrt(screenRatio * cardArea);
+        float cardWidth = cardArea/cardHeight;
+
+        int colSize = (int) (screenWidth/cardWidth);
+        int rowSize = (int) (screenHeight/cardHeight);
+        int index = 0;
+        for(int row = 0; row < rowSize && index < colSize*rowSize; row++){
+            for(int col = 0; col < colSize && index < colSize*rowSize; col++){
+
+                ImageView cardView = new ImageView(memoryGrid.getContext());
+                cardView.setImageBitmap(imageManager.getCardImage(memory.getCard(index)));
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+                params.width = (int) cardWidth;
+                params.height = (int) cardHeight;
+                params.columnSpec = GridLayout.spec(col);
+                params.rowSpec = GridLayout.spec(row);
+                cardView.setLayoutParams(params);
+                memoryGrid.addView(cardView);
+                index++;
             }
-            ImageView cardView = new ImageView(memoryGrid.getContext());
-            cardView.setImageBitmap(imageManager.getCardImage(card));
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            cardView.setMaxHeight(320);
-            cardView.setMaxWidth(160);
-            params.width = 160;
-            params.height = 320;
-            params.columnSpec = GridLayout.spec(col);
-            params.rowSpec = GridLayout.spec(row);
-            cardView.setLayoutParams(params);
-            memoryGrid.addView(cardView);
-            col++;
         }
     }
 

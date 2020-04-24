@@ -26,35 +26,27 @@ public class Soduku {
     }
 
     public void newGame() {
-        boolean gameFound = false;
-        while (!gameFound) {
+        boolean failed = true;
+        while (failed) {
+            failed = false;
             this.game = new int[9][9];
-            boolean failed = false;
-            for (int row = 0; row < 9; row++) {
-                for (int col = 0; col < 9; col++) {
+            for (int row = 0; row < 9 && !failed; row++) {
+                for (int col = 0; col < 9 && !failed; col++) {
                     ArrayList<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
                     int index = random.nextInt(numbers.size());
                     game[row][col] = numbers.get(index);
-                    while (!isValidRow(row) || !isValidColumn(col) || !isValidBlock(getBlockIndex(row, col))) {
+                    while ((!isValidRow(row) || !isValidColumn(col) || !isValidBlock(getBlockIndex(row, col)))&& !failed) {
+                        index = random.nextInt(numbers.size());
+                        game[row][col] = numbers.get(index);
                         numbers.remove(index);
                         if (numbers.isEmpty()) {
                             failed = true;
-                            break;
                         }
-                        index = random.nextInt(numbers.size());
-                        game[row][col] = numbers.get(index);
-                    }
-                    if (failed) {
-                        break;
                     }
 
+
                 }
-                if (failed) {
-                    break;
-                }
-            }
-            if (!failed) {
-                gameFound = true;
+
             }
         }
         setDifficulty(difficulty);

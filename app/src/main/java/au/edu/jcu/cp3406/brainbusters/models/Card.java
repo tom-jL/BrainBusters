@@ -1,16 +1,7 @@
 package au.edu.jcu.cp3406.brainbusters.models;
 
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatDrawableManager;
-import androidx.core.content.res.ResourcesCompat;
 
-import au.edu.jcu.cp3406.brainbusters.R;
 
 public class Card implements Comparable<Card>{
 
@@ -56,12 +47,12 @@ public class Card implements Comparable<Card>{
 
     private void setFileName() {
         StringBuilder stringBuilder = new StringBuilder();
-        if(id%13 < 10)
-            stringBuilder.append(id%13);
-        else
-            stringBuilder.append(rank.toString().toUpperCase().substring(0,0));
-        stringBuilder.append(suit.toString().toUpperCase().substring(0,0));
-
+        if((id%13)+2 < 11) {
+            stringBuilder.append((id% 13)+2);
+        } else {
+            stringBuilder.append(rank.toString().toUpperCase().substring(0, 1));
+        }
+        stringBuilder.append(suit.toString().toUpperCase().substring(0,1));
         fileName = stringBuilder.toString();
     }
 
