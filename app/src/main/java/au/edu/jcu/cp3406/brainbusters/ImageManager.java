@@ -7,19 +7,18 @@ import android.graphics.BitmapFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 import au.edu.jcu.cp3406.brainbusters.models.Card;
 
-public class ImageManager{
+public class ImageManager {
 
     private AssetManager assetManager;
 
 
-    ImageManager(AssetManager assetManager){
+    public ImageManager(AssetManager assetManager) {
         this.assetManager = assetManager;
     }
 
-    Bitmap getMineImage(int id){
+    public Bitmap getMineImage(int id) {
         InputStream stream = null;
         try {
             stream = assetManager.open("mines/" + id + ".png");
@@ -31,9 +30,8 @@ public class ImageManager{
     }
 
 
-
-    Bitmap getCardImage(Card card){
-        String fileName = card.isPaired() ? card.getFileName()+".png" : "blue_back.png";
+    public Bitmap getCardImage(Card card) {
+        String fileName = card.isPaired() ? card.getFileName() + ".png" : "blue_back.png";
         InputStream stream = null;
         try {
             stream = assetManager.open("cards/" + fileName);
@@ -45,8 +43,8 @@ public class ImageManager{
     }
 
 
-    Bitmap getCardFace(Card card){
-        String fileName = card.getFileName()+".png";
+    public Bitmap getCardFace(Card card) {
+        String fileName = card.getFileName() + ".png";
         InputStream stream = null;
         try {
             stream = assetManager.open("cards/" + fileName);
@@ -57,9 +55,9 @@ public class ImageManager{
         return null;
     }
 
-    Bitmap getCardBack(){
-        String fileName =  "blue_back.png";
-                InputStream stream = null;
+    public Bitmap getCardBack() {
+        String fileName = "blue_back.png";
+        InputStream stream = null;
         try {
             stream = assetManager.open("cards/" + fileName);
             return BitmapFactory.decodeStream(stream);

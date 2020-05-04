@@ -11,10 +11,11 @@ public class SodukuModelTest {
 
     @Test
     public void soduku(){
-        Soduku soduku = new Soduku();
+        Soduku soduku = new Soduku(Soduku.Difficulty.easy);
+        soduku.newGame();
         System.out.println(soduku);
         assertTrue(soduku.isValid());
-        soduku.setDifficulty(Soduku.Difficulty.easy);
+        //soduku.setDifficulty(Soduku.Difficulty.easy);
         System.out.println(soduku);
         assertTrue(soduku.isValid());
     }

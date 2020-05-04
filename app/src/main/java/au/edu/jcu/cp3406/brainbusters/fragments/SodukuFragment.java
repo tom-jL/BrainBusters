@@ -1,19 +1,18 @@
-package au.edu.jcu.cp3406.brainbusters;
+package au.edu.jcu.cp3406.brainbusters.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import au.edu.jcu.cp3406.brainbusters.R;
 import au.edu.jcu.cp3406.brainbusters.models.Soduku;
 
 
@@ -33,15 +32,15 @@ public class SodukuFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         soduku = new Soduku(Soduku.Difficulty.easy);
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             soduku.loadState(savedInstanceState.getIntArray("state"));
         } else {
             soduku.newGame();
         }
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        float screenWidth = (float)displayMetrics.widthPixels;
-        numberViewWidth = screenWidth/9;
+        float screenWidth = (float) displayMetrics.widthPixels;
+        numberViewWidth = screenWidth / 9;
 
 
     }
@@ -57,25 +56,25 @@ public class SodukuFragment extends Fragment {
     public void onStart() {
         super.onStart();
         View view = getView();
-        if (view != null){
-            GridLayout sodukuGrid = (GridLayout) view.findViewById(R.id.sodukuGrid);
+        if (view != null) {
+            GridLayout sodukuGrid = view.findViewById(R.id.sodukuGrid);
             buildGrid(sodukuGrid);
         }
     }
 
     void buildGrid(GridLayout sodukuGrid) {
         sodukuGrid.removeAllViewsInLayout();
-        for(int row = 0; row < soduku.getGame().length; row++){
-            for(int col = 0; col < soduku.getRow(row).length; col++){
+        for (int row = 0; row < soduku.getGame().length; row++) {
+            for (int col = 0; col < soduku.getRow(row).length; col++) {
                 Button numberView = new Button(sodukuGrid.getContext());
-                if(soduku.getCell(row, col) == 0){
+                if (soduku.getCell(row, col) == 0) {
                     numberView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
                         }
                     });
-                }else{
+                } else {
                     numberView.setText(String.valueOf(soduku.getCell(row, col)));
                     numberView.setClickable(false);
                 }
@@ -91,12 +90,9 @@ public class SodukuFragment extends Fragment {
     }
 
 
-
-
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putIntArray("state",soduku.saveState());
+        outState.putIntArray("state", soduku.saveState());
     }
 
 }

@@ -12,17 +12,35 @@ public class Soduku {
     private Difficulty difficulty;
     private int[][] game;
 
-    public enum Difficulty {
-        hard,
-        med,
-        easy,
-    }
-
     public Soduku() {
     }
 
     public Soduku(Difficulty difficulty) {
         this.difficulty = difficulty;
+    }
+
+    private static int getBlockIndex(int row, int col) {
+        int index = 0;
+        for (int i = 1; i < 4; i++) {
+            for (int j = 1; j < 4; j++) {
+                if (row < i * 3 && col < j * 3) {
+                    return index;
+                }
+                ++index;
+            }
+        }
+        return index;
+    }
+
+    private static boolean isDistinct(int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = i + 1; j < array.length; j++) {
+                if (array[i] == array[j] && array[i] != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void newGame() {
@@ -35,7 +53,7 @@ public class Soduku {
                     ArrayList<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
                     int index = random.nextInt(numbers.size());
                     game[row][col] = numbers.get(index);
-                    while ((!isValidRow(row) || !isValidColumn(col) || !isValidBlock(getBlockIndex(row, col)))&& !failed) {
+                    while ((!isValidRow(row) || !isValidColumn(col) || !isValidBlock(getBlockIndex(row, col))) && !failed) {
                         index = random.nextInt(numbers.size());
                         game[row][col] = numbers.get(index);
                         numbers.remove(index);
@@ -56,25 +74,22 @@ public class Soduku {
         return game;
     }
 
-
     public int[] saveState() {
-        int[] gameArray = new int[9*9];
+        int[] gameArray = new int[9 * 9];
         int copyPos = 0;
-        for(int[] row : game){
-            System.arraycopy(row, 0,gameArray,copyPos,row.length);
+        for (int[] row : game) {
+            System.arraycopy(row, 0, gameArray, copyPos, row.length);
             copyPos += row.length;
         }
         return gameArray;
     }
 
     public void loadState(int[] gameArray) {
-        for(int row = 0; row < 9; row++){
+        for (int row = 0; row < 9; row++) {
             System.arraycopy(gameArray, row * 9, game[row], 0, 9);
         }
         setDifficulty(this.difficulty);
     }
-
-
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
@@ -90,7 +105,7 @@ public class Soduku {
         }
     }
 
-    public int getCell(int row, int col){
+    public int getCell(int row, int col) {
         return game[row][col];
     }
 
@@ -118,19 +133,6 @@ public class Soduku {
         return block;
     }
 
-    private static int getBlockIndex(int row, int col) {
-        int index = 0;
-        for (int i = 1; i < 4; i++) {
-            for (int j = 1; j < 4; j++) {
-                if (row < i * 3 && col < j * 3) {
-                    return index;
-                }
-                ++index;
-            }
-        }
-        return index;
-    }
-
     private boolean isValidRow(int rowIndex) {
         int[] row = getRow(rowIndex);
         return isDistinct(row);
@@ -155,17 +157,6 @@ public class Soduku {
         return true;
     }
 
-    private static boolean isDistinct(int[] array) {
-        for (int i = 0; i < array.length; i++) {
-            for (int j = i + 1; j < array.length; j++) {
-                if (array[i] == array[j] && array[i] != 0) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     @NonNull
     @Override
     public String toString() {
@@ -174,6 +165,12 @@ public class Soduku {
             sodukuArray.append(Arrays.toString(game[i])).append("\n");
         }
         return sodukuArray.toString();
+    }
+
+    public enum Difficulty {
+        hard,
+        med,
+        easy,
     }
 }
 

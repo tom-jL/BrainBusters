@@ -30,8 +30,7 @@ public class MemoryModelTest {
         assertSame(card.getRank(), Card.Rank.ACE);
         assertSame(card.getSuit(), Card.Suit.Hearts);
 
-        memory.selectCard(memory.getCard(0));
-        memory.selectCard(memory.getCard(13*2));
+
         assertTrue(memory.getCard(0).isPaired());
         assertTrue(memory.getCard(13*2).isPaired());
 

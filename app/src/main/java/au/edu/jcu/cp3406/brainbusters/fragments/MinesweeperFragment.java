@@ -1,11 +1,6 @@
-package au.edu.jcu.cp3406.brainbusters;
+package au.edu.jcu.cp3406.brainbusters.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -14,7 +9,14 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import au.edu.jcu.cp3406.brainbusters.ImageManager;
+import au.edu.jcu.cp3406.brainbusters.R;
 import au.edu.jcu.cp3406.brainbusters.models.Minesweeper;
+import au.edu.jcu.cp3406.brainbusters.views.MineView;
 
 
 /**
@@ -39,16 +41,14 @@ public class MinesweeperFragment extends Fragment {
         super.onCreate(savedInstanceState);
         uiHandler = new Handler();
         minesweeper = new Minesweeper();
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             minesweeper.loadState(savedInstanceState.getIntArray("state"));
         }
 
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        float screenWidth = (float)displayMetrics.widthPixels;
-        mineViewWidth = screenWidth/8;
-
-
+        float screenWidth = (float) displayMetrics.widthPixels;
+        mineViewWidth = screenWidth / 8;
 
 
     }
@@ -64,9 +64,9 @@ public class MinesweeperFragment extends Fragment {
     public void onStart() {
         super.onStart();
         View view = getView();
-        if (view != null){
+        if (view != null) {
             imageManager = new ImageManager(view.getContext().getAssets());
-            mineGrid = (GridLayout) view.findViewById(R.id.mineGrid);
+            mineGrid = view.findViewById(R.id.mineGrid);
             buildGrid();
         }
     }
@@ -75,8 +75,8 @@ public class MinesweeperFragment extends Fragment {
         mineGrid.removeAllViewsInLayout();
         int rowCount = 0;
         int colCount = 0;
-        for(int[] row : minesweeper.getGrid()){
-            for(final int col : row){
+        for (int[] row : minesweeper.getGrid()) {
+            for (final int col : row) {
                 //final CardView cardView = new CardView(mineGrid.getContext(), minesweeper.getCard(index), imageManager);
                 MineView mineView = new MineView(mineGrid.getContext(), imageManager);
                 mineView.setImageBitmap(imageManager.getBlankMine());
@@ -113,10 +113,10 @@ public class MinesweeperFragment extends Fragment {
         }
     }
 
-    public void revealAll(){
+    public void revealAll() {
         int index = 0;
-        for(int row = 0; row<minesweeper.getGrid().length; row++){
-            for(int col = 0; col<minesweeper.getGrid()[row].length;col++){
+        for (int row = 0; row < minesweeper.getGrid().length; row++) {
+            for (int col = 0; col < minesweeper.getGrid()[row].length; col++) {
                 ImageView mineView = (ImageView) mineGrid.getChildAt(index);
                 mineView.setImageBitmap(imageManager.getMineImage(minesweeper.getGrid()[row][col]));
                 index++;
@@ -124,18 +124,18 @@ public class MinesweeperFragment extends Fragment {
         }
     }
 
-    public void revealBlock(int row,int col){
+    public void revealBlock(int row, int col) {
 
-        for(int x=-1;x<2;x++){
-            for(int y=-1;y<2;y++){
-                try{
-                    MineView mineView = (MineView) mineGrid.getChildAt((row+x)*8+(col+y));
-                    if(minesweeper.getGrid()[row+x][col+y] == 0 && !(x == 0 && y == 0) && !mineView.isRevealed()) {
+        for (int x = -1; x < 2; x++) {
+            for (int y = -1; y < 2; y++) {
+                try {
+                    MineView mineView = (MineView) mineGrid.getChildAt((row + x) * 8 + (col + y));
+                    if (minesweeper.getGrid()[row + x][col + y] == 0 && !(x == 0 && y == 0) && !mineView.isRevealed()) {
                         revealBlock(row + x, col + y);
                     }
-                    mineView = (MineView) mineGrid.getChildAt((row)*8+(col));
+                    mineView = (MineView) mineGrid.getChildAt((row) * 8 + (col));
                     mineView.revealMine(minesweeper.getGrid()[row][col]);
-                } catch(Exception ignored){
+                } catch (Exception ignored) {
                 }
             }
         }
@@ -143,7 +143,7 @@ public class MinesweeperFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putIntArray("state",minesweeper.saveState());
+        outState.putIntArray("state", minesweeper.saveState());
     }
 
 

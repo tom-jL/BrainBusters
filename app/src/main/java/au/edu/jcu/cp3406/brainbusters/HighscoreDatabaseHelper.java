@@ -11,7 +11,9 @@ public class HighscoreDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "highscores";
     private static final int DB_VERSION = 1;
 
-    HighscoreDatabaseHelper(Context context){ super(context, DB_NAME, null, DB_VERSION);}
+    HighscoreDatabaseHelper(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -23,10 +25,11 @@ public class HighscoreDatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { }
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
 
 
-    void insertScore(int game, int time, int difficulty){
+    void insertScore(int game, int time, int difficulty) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues score = new ContentValues();
         score.put("GAME", game);

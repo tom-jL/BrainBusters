@@ -1,9 +1,8 @@
-package au.edu.jcu.cp3406.brainbusters;
+package au.edu.jcu.cp3406.brainbusters.views;
 
 import android.content.Context;
-import android.media.Image;
-import android.widget.ImageView;
 
+import au.edu.jcu.cp3406.brainbusters.ImageManager;
 import au.edu.jcu.cp3406.brainbusters.models.Card;
 
 public class CardView extends androidx.appcompat.widget.AppCompatImageView {
@@ -16,7 +15,7 @@ public class CardView extends androidx.appcompat.widget.AppCompatImageView {
         super(context);
     }
 
-    public CardView(Context context, Card card, ImageManager imageManager){
+    public CardView(Context context, Card card, ImageManager imageManager) {
         super(context);
         this.card = card;
         this.imageManager = imageManager;
@@ -27,11 +26,11 @@ public class CardView extends androidx.appcompat.widget.AppCompatImageView {
         return card;
     }
 
-    public void showCard(){
+    public void showCard() {
         setImageBitmap(imageManager.getCardFace(card));
     }
 
-    public void hideCard(){
+    public void hideCard() {
         setImageBitmap(imageManager.getCardBack());
     }
 

@@ -7,30 +7,29 @@ import java.util.Collections;
 
 public class Memory {
 
+    public static final int DECK_SIZE = 26;
     ArrayList<Card> cards;
 
-    public static final int DECK_SIZE = 26;
-
-    public Memory(){
+    public Memory() {
         cards = new ArrayList<>();
-        for(int i =0; i<DECK_SIZE;i++){
-            cards.add(new Card(i*52/DECK_SIZE));
+        for (int i = 0; i < DECK_SIZE; i++) {
+            cards.add(new Card(i * 52 / DECK_SIZE));
         }
     }
 
 
-    public int[] saveOrderState(){
+    public int[] saveOrderState() {
         int[] state = new int[DECK_SIZE];
-        for(int i =0; i <state.length; i++){
+        for (int i = 0; i < state.length; i++) {
             Card card = getCard(i);
             state[i] = card.id;
         }
         return state;
     }
 
-    public boolean[] savePairState(){
+    public boolean[] savePairState() {
         boolean[] state = new boolean[DECK_SIZE];
-        for(int i =0; i <state.length; i++){
+        for (int i = 0; i < state.length; i++) {
             Card card = getCard(i);
             state[i] = card.paired;
         }
@@ -39,18 +38,18 @@ public class Memory {
 
     public void loadState(int[] orderState, boolean[] pairedState) {
         cards = new ArrayList<>();
-        for(int i =0; i <DECK_SIZE; i++){
+        for (int i = 0; i < DECK_SIZE; i++) {
             Card card = new Card(orderState[i], pairedState[i]);
             cards.add(card);
         }
 
     }
 
-    public void sortCards(){
+    public void sortCards() {
         Collections.sort(cards);
     }
 
-    public void shuffleCards(){
+    public void shuffleCards() {
         Collections.shuffle(cards);
     }
 
@@ -59,7 +58,7 @@ public class Memory {
         return cards;
     }
 
-    public Card getCard(int index){
+    public Card getCard(int index) {
         return cards.get(index);
     }
 

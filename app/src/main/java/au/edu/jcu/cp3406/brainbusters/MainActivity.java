@@ -1,5 +1,7 @@
 package au.edu.jcu.cp3406.brainbusters;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,12 +9,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import android.os.Bundle;
-
 
 import com.google.android.material.tabs.TabLayout;
 
-import au.edu.jcu.cp3406.brainbusters.models.Minesweeper;
+import au.edu.jcu.cp3406.brainbusters.fragments.MemoryFragment;
+import au.edu.jcu.cp3406.brainbusters.fragments.MinesweeperFragment;
+import au.edu.jcu.cp3406.brainbusters.fragments.SodukuFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,16 +24,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         GamePagerAdapter gamePagerAdapter = new GamePagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        ViewPager pager = (ViewPager) findViewById(R.id.gamePager);
+        ViewPager pager = findViewById(R.id.gamePager);
         pager.setAdapter(gamePagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(pager);
 
     }
 }
 
-class GamePagerAdapter extends FragmentPagerAdapter{
+class GamePagerAdapter extends FragmentPagerAdapter {
 
     public GamePagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
@@ -45,7 +47,7 @@ class GamePagerAdapter extends FragmentPagerAdapter{
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        switch(position){
+        switch (position) {
             case 0:
                 return "Soduku";
             case 1:
