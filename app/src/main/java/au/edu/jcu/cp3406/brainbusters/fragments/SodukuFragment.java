@@ -1,10 +1,14 @@
 package au.edu.jcu.cp3406.brainbusters.fragments;
 
+import android.content.Context;
+import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.GridLayout;
 
@@ -14,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import au.edu.jcu.cp3406.brainbusters.R;
 import au.edu.jcu.cp3406.brainbusters.models.Soduku;
+import au.edu.jcu.cp3406.brainbusters.views.NumberView;
 
 
 /**
@@ -66,18 +71,7 @@ public class SodukuFragment extends Fragment {
         sodukuGrid.removeAllViewsInLayout();
         for (int row = 0; row < soduku.getGame().length; row++) {
             for (int col = 0; col < soduku.getRow(row).length; col++) {
-                Button numberView = new Button(sodukuGrid.getContext());
-                if (soduku.getCell(row, col) == 0) {
-                    numberView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                        }
-                    });
-                } else {
-                    numberView.setText(String.valueOf(soduku.getCell(row, col)));
-                    numberView.setClickable(false);
-                }
+                NumberView numberView = new NumberView(sodukuGrid.getContext(),soduku.getCell(row, col));
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.width = (int) numberViewWidth;
                 params.height = (int) numberViewWidth;
