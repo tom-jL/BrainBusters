@@ -35,7 +35,7 @@ public class Soduku {
     private static boolean isDistinct(int[] array) {
         for (int i = 0; i < array.length; i++) {
             for (int j = i + 1; j < array.length; j++) {
-                if (array[i] == array[j] && array[i] != 0) {
+                if ((array[i] == array[j]) && array[i] != 0) {
                     return false;
                 }
             }
@@ -67,7 +67,6 @@ public class Soduku {
 
             }
         }
-        setDifficulty(difficulty);
     }
 
     public int[][] getGame() {
@@ -88,20 +87,19 @@ public class Soduku {
         for (int row = 0; row < 9; row++) {
             System.arraycopy(gameArray, row * 9, game[row], 0, 9);
         }
-        setDifficulty(this.difficulty);
     }
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
-        int given = 9 * 9 - difficulty.ordinal() * 10;
-        for (int i = given; i > 0; --i) {
+        int hidden = (difficulty.ordinal()+1) * 10;
+        for (int i = hidden; i > 0; --i) {
             int row = random.nextInt(9);
             int col = random.nextInt(9);
-            while (game[row][col] == 0) {
+            while (game[row][col] == -1) {
                 row = random.nextInt(9);
                 col = random.nextInt(9);
             }
-            game[row][col] = 0;
+            game[row][col] = -1;
         }
     }
 
@@ -150,7 +148,7 @@ public class Soduku {
 
     public boolean isValid() {
         for (int index = 0; index < 9; index++) {
-            if (!isValidRow(index) || !isValidColumn(index) || !isValidBlock(index)) {
+            if (!(isValidRow(index) && isValidColumn(index) && isValidBlock(index))) {
                 return false;
             }
         }
@@ -167,10 +165,14 @@ public class Soduku {
         return sodukuArray.toString();
     }
 
+    public void setCell(int row, int col, int number) {
+        game[row][col] = number;
+    }
+
     public enum Difficulty {
-        hard,
-        med,
         easy,
+        med,
+        hard,
     }
 }
 

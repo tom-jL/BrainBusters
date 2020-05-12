@@ -1,5 +1,6 @@
 package au.edu.jcu.cp3406.brainbusters;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import au.edu.jcu.cp3406.brainbusters.models.Soduku;
@@ -15,8 +16,8 @@ public class SodukuModelTest {
         soduku.newGame();
         System.out.println(soduku);
         assertTrue(soduku.isValid());
-        //soduku.setDifficulty(Soduku.Difficulty.easy);
+        soduku.setDifficulty(Soduku.Difficulty.easy);
         System.out.println(soduku);
-        assertTrue(soduku.isValid());
+        Assert.assertFalse(soduku.isValid());
     }
 }
