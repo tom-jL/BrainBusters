@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,10 +82,12 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
                 params.columnSpec = GridLayout.spec(col);
                 params.rowSpec = GridLayout.spec(row);
                 numberView.setLayoutParams(params);
+                numberView.setTextSize((float) (numberViewWidth*0.2));
                 numberView.setOnFocusChangeListener(this);
                 sodukuGrid.addView(numberView);
             }
         }
+
     }
 
 

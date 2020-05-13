@@ -1,12 +1,8 @@
 package au.edu.jcu.cp3406.brainbusters.views;
 
 import android.content.Context;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.text.InputType;
-import android.util.TypedValue;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import au.edu.jcu.cp3406.brainbusters.R;
 
@@ -18,27 +14,33 @@ public class NumberView extends androidx.appcompat.widget.AppCompatEditText {
     int number;
 
     public NumberView(Context context) {
-        super(context, null, R.style.TextAppearance_AppCompat_Button);
+        super(context);
     }
 
     public NumberView(Context context, int number, int row, int col){
-        super(context);//, null, R.style.Widget_AppCompat_Button_Borderless_Colored);
+        super(context);
         this.number = number;
         this.row = row;
         this.col = col;
         if(number == -1){
-            setInputType(InputType.TYPE_CLASS_PHONE);
+            setUnsolved();
         } else {
-            setText(String.valueOf(number));
-            //setBackgroundColor(getResources().getColor(R.color.material_on_background_disabled));
-            setClickable(false);
-            setFocusable(false);
+            setSolved();
         }
-        Drawable background = getResources().getDrawable(R.drawable.soduku_btn);
-        setBackground(getResources().getDrawable(R.drawable.soduku_btn));
         setCursorVisible(false);
         setGravity(1);
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, 60);
+    }
+
+    public void setSolved(){
+        setText(String.valueOf(number));
+        setClickable(false);
+        setFocusable(false);
+        setBackground(getResources().getDrawable(R.drawable.soduku_solved));
+    }
+
+    public void setUnsolved(){
+        setInputType(InputType.TYPE_CLASS_PHONE);
+        setBackground(getResources().getDrawable(R.drawable.soduku_unsolved));
     }
 
     public int getCol() {
@@ -54,17 +56,22 @@ public class NumberView extends androidx.appcompat.widget.AppCompatEditText {
     }
 
 
-
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        try {
-            number = Integer.parseInt(text.toString());
-            if(!(number<10 && number>0)){
+        if(length()>1){
+            number = -1;
+            setText("");
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getWindowToken(), 0);
+        } else {
+            try {
+                number = Integer.parseInt(text.toString());
+                if (!(number < 10 && number > 0)) {
+                    number = -1;
+                }
+            } catch (Exception e) {
                 number = -1;
             }
-        } catch (Exception e){
-            number = -1;
         }
-
     }
 }

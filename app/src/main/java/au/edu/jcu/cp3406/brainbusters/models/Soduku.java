@@ -13,6 +13,7 @@ public class Soduku {
     private int[][] game;
 
     public Soduku() {
+        game = new int[9][9];
     }
 
     public Soduku(Difficulty difficulty) {
@@ -146,6 +147,10 @@ public class Soduku {
         return isDistinct(block);
     }
 
+    public boolean isValid(int row, int col){
+        return (isValidRow(row) && isValidColumn(col) && isValidBlock(getBlockIndex(row,col)));
+    }
+
     public boolean isValid() {
         for (int index = 0; index < 9; index++) {
             if (!(isValidRow(index) && isValidColumn(index) && isValidBlock(index))) {
@@ -160,7 +165,7 @@ public class Soduku {
     public String toString() {
         StringBuilder sodukuArray = new StringBuilder();
         for (int i = 0; i < 9; i++) {
-            sodukuArray.append(Arrays.toString(game[i])).append("\n");
+            sodukuArray.append("\n").append(Arrays.toString(game[i]));
         }
         return sodukuArray.toString();
     }
