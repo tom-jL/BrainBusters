@@ -1,6 +1,7 @@
 package au.edu.jcu.cp3406.brainbusters.fragments;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -69,6 +70,14 @@ public class MemoryFragment extends Fragment {
         float cardArea = (screenArea) / (Memory.DECK_SIZE);
         cardHeight = (float) Math.sqrt(screenRatio * cardArea);
         cardWidth = cardArea / cardHeight;
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            rowSize = (int) (screenWidth / cardHeight);
+            colSize = (int) (screenHeight / cardWidth);
+        } else {
+            colSize = (int) (screenWidth / cardWidth);
+            rowSize = (int) (screenHeight / cardHeight);
+        }
         colSize = (int) (screenWidth / cardWidth);
         rowSize = (int) (screenHeight / cardHeight);
 
@@ -170,7 +179,7 @@ public class MemoryFragment extends Fragment {
                             cardView.hideCard();
                         }
                     };
-                    cardHandler.postDelayed(hideCards, 2000);
+                    cardHandler.postDelayed(hideCards, 1200);
                 }
                 guessCard = null;
             }

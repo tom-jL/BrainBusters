@@ -132,6 +132,8 @@ public class MinesweeperFragment extends Fragment {
                     MineView mineView = (MineView) mineGrid.getChildAt((row + x) * 8 + (col + y));
                     if (minesweeper.getGrid()[row + x][col + y] == 0 && !(x == 0 && y == 0) && !mineView.isRevealed()) {
                         revealBlock(row + x, col + y);
+                    } else {
+                        mineView.revealMine(minesweeper.getGrid()[row + x][col + y]);
                     }
                     mineView = (MineView) mineGrid.getChildAt((row) * 8 + (col));
                     mineView.revealMine(minesweeper.getGrid()[row][col]);

@@ -1,6 +1,7 @@
 package au.edu.jcu.cp3406.brainbusters.fragments;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.text.InputType;
@@ -47,9 +48,16 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
             soduku.setDifficulty(Soduku.Difficulty.easy);
         }
 
+        int orientation = getResources().getConfiguration().orientation;
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        float screenWidth = (float) displayMetrics.widthPixels;
-        numberViewWidth = screenWidth / 9;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            float screenHeight = (float) displayMetrics.heightPixels;
+            numberViewWidth = screenHeight / 9;
+        } else {
+            float screenWidth = (float) displayMetrics.widthPixels;
+            numberViewWidth = screenWidth / 9;
+        }
+
 
 
     }
