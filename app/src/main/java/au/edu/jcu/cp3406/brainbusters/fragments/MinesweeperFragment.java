@@ -1,5 +1,6 @@
 package au.edu.jcu.cp3406.brainbusters.fragments;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -12,9 +13,12 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import au.edu.jcu.cp3406.brainbusters.ImageManager;
+import au.edu.jcu.cp3406.brainbusters.MainActivity;
 import au.edu.jcu.cp3406.brainbusters.R;
+import au.edu.jcu.cp3406.brainbusters.StatsDatabaseHelper;
 import au.edu.jcu.cp3406.brainbusters.models.Minesweeper;
 import au.edu.jcu.cp3406.brainbusters.views.MineView;
 
@@ -30,6 +34,8 @@ public class MinesweeperFragment extends Fragment {
     ImageManager imageManager;
     GridLayout mineGrid;
     float mineViewWidth;
+
+    private long dataBaseID = 1;
 
     public MinesweeperFragment() {
         // Required empty public constructor
@@ -48,7 +54,13 @@ public class MinesweeperFragment extends Fragment {
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float screenWidth = (float) displayMetrics.widthPixels;
-        mineViewWidth = screenWidth / 8;
+        float screenHeight = (float) displayMetrics.heightPixels;
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mineViewWidth = (float) (screenHeight * 0.8 / 8);
+        } else {
+            mineViewWidth = screenWidth / 8;
+        }
 
 
     }
@@ -101,6 +113,10 @@ public class MinesweeperFragment extends Fragment {
                                 break;
                             default:
                                 ((MineView) mineView).revealMine(col);
+                                if(sweptMines()){
+                                    ((MainActivity)getActivity()).updateStat(dataBaseID);
+                                }
+
                         }
                     }
                 });
@@ -111,6 +127,27 @@ public class MinesweeperFragment extends Fragment {
             colCount = 0;
             rowCount++;
         }
+
+        int orientation = getResources().getConfiguration().orientation;
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            float screenWidth = (float) displayMetrics.widthPixels;
+            ((ViewPager)mineGrid.getParent()).setPageMargin((int) (screenWidth/2-(mineViewWidth*9)/2));
+        }
+    }
+
+    public boolean sweptMines(){
+        int index = 0;
+        for (int row = 0; row < minesweeper.getGrid().length; row++) {
+            for (int col = 0; col < minesweeper.getGrid()[row].length; col++) {
+                if(!((MineView)mineGrid.getChildAt(index)).isRevealed() && !minesweeper.isBomb(row,col)){
+                    return false;
+                } else if (((MineView)mineGrid.getChildAt(index)).isRevealed() && minesweeper.isBomb(row,col)){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void revealAll() {

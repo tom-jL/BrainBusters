@@ -18,8 +18,11 @@ import android.widget.GridLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
+import au.edu.jcu.cp3406.brainbusters.MainActivity;
 import au.edu.jcu.cp3406.brainbusters.R;
+import au.edu.jcu.cp3406.brainbusters.StatsDatabaseHelper;
 import au.edu.jcu.cp3406.brainbusters.models.Soduku;
 import au.edu.jcu.cp3406.brainbusters.views.NumberView;
 
@@ -33,6 +36,9 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
     float numberViewWidth;
     private GridLayout sodukuGrid;
 
+
+    private long dataBaseID = 0;
+
     public SodukuFragment() {
         // Required empty public constructor
     }
@@ -40,6 +46,7 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         soduku = new Soduku();
         if (savedInstanceState != null) {
             soduku.loadState(savedInstanceState.getIntArray("state"));
@@ -51,8 +58,9 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
         int orientation = getResources().getConfiguration().orientation;
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.i("SodukuFragment.onCreate","Display is Landscape");
             float screenHeight = (float) displayMetrics.heightPixels;
-            numberViewWidth = screenHeight / 9;
+            numberViewWidth = (float) ((screenHeight * 0.8) / 9);
         } else {
             float screenWidth = (float) displayMetrics.widthPixels;
             numberViewWidth = screenWidth / 9;
@@ -95,7 +103,12 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
                 sodukuGrid.addView(numberView);
             }
         }
-
+        int orientation = getResources().getConfiguration().orientation;
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            float screenWidth = (float) displayMetrics.widthPixels;
+            ((ViewPager)sodukuGrid.getParent()).setPageMargin((int) (screenWidth/2-((numberViewWidth*9)/2)));
+        }
     }
 
 
@@ -114,6 +127,7 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
         } else {
             if (soduku.isValid()) {
                 Log.i("State", "You have solved the puzzle.");
+                ((MainActivity)getActivity()).updateStat(dataBaseID);
 
             } else {
                 Log.i("State", soduku.toString());

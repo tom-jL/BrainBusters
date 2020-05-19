@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".StatsActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@mipmap/ic_brain_round"
+            android:onClick="backToMain"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Soduku"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:background="#FFFF"
+        android:textSize="30sp"/>
+    <TextView
+        android:id="@+id/sodukuStat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="50sp"
+        android:text="0"
+        android:textColor="#FFFFFF"
+        android:background="@color/colorPrimary" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Minesweeper"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:background="#FFFF"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/mineStat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="50sp"
+        android:text="0"
+        android:textColor="#FFFFFF"
+        android:background="@color/colorPrimary" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Memory"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:background="#FFFF"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/memoryStat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="50sp"
+        android:text="0"
+        android:textColor="#FFFFFF"
+        android:background="@color/colorPrimary" />
+
+    <View
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:onClick="shareStats"
+        android:background="@drawable/ic_share_black_18dp"/>
+
+
+</LinearLayout>

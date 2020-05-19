@@ -16,10 +16,13 @@ import android.widget.GridLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import au.edu.jcu.cp3406.brainbusters.ImageManager;
+import au.edu.jcu.cp3406.brainbusters.MainActivity;
 import au.edu.jcu.cp3406.brainbusters.R;
 import au.edu.jcu.cp3406.brainbusters.ShakeSensor;
+import au.edu.jcu.cp3406.brainbusters.StatsDatabaseHelper;
 import au.edu.jcu.cp3406.brainbusters.models.Card;
 import au.edu.jcu.cp3406.brainbusters.models.Memory;
 import au.edu.jcu.cp3406.brainbusters.views.CardView;
@@ -45,6 +48,8 @@ public class MemoryFragment extends Fragment {
     private Sensor accelerometer;
     private ShakeSensor shakeSensor;
 
+    private long dataBaseID = 2;
+
     public MemoryFragment() {
         // Required empty public constructor
     }
@@ -63,23 +68,22 @@ public class MemoryFragment extends Fragment {
         }
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+
         float screenWidth = (float) displayMetrics.widthPixels;
-        float screenHeight = (float) ((float) displayMetrics.heightPixels * 0.8);
-        float screenRatio = screenHeight / screenWidth;
-        float screenArea = screenWidth * screenHeight;
-        float cardArea = (screenArea) / (Memory.DECK_SIZE);
-        cardHeight = (float) Math.sqrt(screenRatio * cardArea);
-        cardWidth = cardArea / cardHeight;
+        float screenHeight = (float) ((float) displayMetrics.heightPixels);
         int orientation = getResources().getConfiguration().orientation;
+        cardWidth = screenWidth / 5;
+        cardHeight = (float) ((screenHeight * 0.8) / 5);
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            rowSize = (int) (screenWidth / cardHeight);
-            colSize = (int) (screenHeight / cardWidth);
+            Log.i("MemoryFragment.onCreate","Orientation Landscape");
+            cardWidth = screenWidth / 13;
+            cardHeight = (float) (screenHeight * 0.8 / 3);
+            colSize = 2;
+            rowSize = 13;
         } else {
-            colSize = (int) (screenWidth / cardWidth);
-            rowSize = (int) (screenHeight / cardHeight);
+            rowSize = 5;
+            colSize = 5;
         }
-        colSize = (int) (screenWidth / cardWidth);
-        rowSize = (int) (screenHeight / cardHeight);
 
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -90,7 +94,6 @@ public class MemoryFragment extends Fragment {
             public void onShake(int count) {
                 Log.i("Sensor", "Device was shaked");
                 if(count > 2 && memoryGrid != null){
-
                     memory.shuffleCards();
                     buildGrid();
                 }
@@ -135,9 +138,9 @@ public class MemoryFragment extends Fragment {
     void buildGrid() {
         memoryGrid.removeAllViewsInLayout();
         int index = 0;
-        for (int row = 0; row < rowSize && index < colSize * rowSize; row++) {
-            for (int col = 0; col < colSize && index < colSize * rowSize; col++) {
-                final CardView cardView = new CardView(memoryGrid.getContext(), memory.getCard(index), imageManager);
+        for (int row = 0; row < colSize && index < colSize * rowSize; row++) {
+            for (int col = 0; col < rowSize && index < colSize * rowSize; col++) {
+                final CardView cardView = new CardView(memoryGrid.getContext(), memory.getCard(index++), imageManager);
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.width = (int) cardWidth;
                 params.height = (int) cardHeight;
@@ -145,7 +148,6 @@ public class MemoryFragment extends Fragment {
                 params.rowSpec = GridLayout.spec(row);
                 cardView.setLayoutParams(params);
 
-                final int finalIndex = index;
                 cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -155,9 +157,11 @@ public class MemoryFragment extends Fragment {
                 });
 
                 memoryGrid.addView(cardView);
-                index++;
+
             }
         }
+
+        //((ViewPager)memoryGrid.getParent()).setPageMargin(1);
     }
 
     public void selectCard(final CardView cardView) {
@@ -170,6 +174,7 @@ public class MemoryFragment extends Fragment {
                 if (card.compareTo(guessCard.getCard()) == 0) {
                     card.setPaired(true);
                     guessCard.getCard().setPaired(true);
+                    ((MainActivity)getActivity()).updateStat(dataBaseID);
                 } else {
                     final CardView flipCard = guessCard;
                     Runnable hideCards = new Runnable() {
@@ -184,9 +189,7 @@ public class MemoryFragment extends Fragment {
                 guessCard = null;
             }
         }
-
     }
-
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {

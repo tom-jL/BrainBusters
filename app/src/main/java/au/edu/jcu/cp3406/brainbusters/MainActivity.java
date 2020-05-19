@@ -1,6 +1,9 @@
 package au.edu.jcu.cp3406.brainbusters;
 
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,10 +21,14 @@ import au.edu.jcu.cp3406.brainbusters.fragments.SodukuFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private StatsDatabaseHelper statsDatabaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        statsDatabaseHelper = new StatsDatabaseHelper(this);
 
         GamePagerAdapter gamePagerAdapter = new GamePagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         ViewPager pager = findViewById(R.id.gamePager);
@@ -30,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(pager);
 
+    }
+
+    public void showStats(View view) {
+        Intent intent = new Intent(this, StatsActivity.class);
+        startActivity(intent);
+    }
+
+    public void updateStat(long id){
+        statsDatabaseHelper.insertStat(id);
     }
 }
 
@@ -72,5 +88,8 @@ class GamePagerAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return POSITION_NONE;
+    }
 }

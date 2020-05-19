@@ -48,6 +48,10 @@ public class Minesweeper {
         return grid;
     }
 
+    public boolean isBomb(int row,int col){
+        return grid[row][col] == 9;
+    }
+
     public int[] saveState() {
         int[] gameArray = new int[grid.length * grid[0].length];
         int copyPos = 0;

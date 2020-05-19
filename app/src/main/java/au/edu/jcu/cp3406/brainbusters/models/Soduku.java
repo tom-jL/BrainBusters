@@ -12,6 +12,7 @@ public class Soduku {
     private Difficulty difficulty;
     private int[][] game;
 
+
     public Soduku() {
         game = new int[9][9];
     }
