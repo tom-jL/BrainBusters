@@ -2,6 +2,7 @@ package au.edu.jcu.cp3406.brainbusters;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -80,12 +81,13 @@ public class StatsActivity extends AppCompatActivity {
 
         final String string = "I've solved " + stats[0] +" Soduku puzzles, "+stats[1]+" Minesweeper puzzles and found "+stats[2]+" pairs of cards. -BrainBuster";
 
+        final Context context = this;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Log.i("twitter",twitter.getOAuthAccessToken().toString());
                     twitter.updateStatus(string);
+                    Toast.makeText(context,"Posted tweet!",Toast.LENGTH_SHORT).show();
                 } catch (TwitterException e) {
                     e.printStackTrace();
                 }

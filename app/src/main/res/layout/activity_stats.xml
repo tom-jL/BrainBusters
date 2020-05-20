@@ -8,10 +8,18 @@
     android:background="@color/colorPrimary"
     tools:context=".StatsActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="BrainBusters"
+            android:textSize="40sp"
+            android:layout_gravity="center">
+        </TextView>
 
         <Button
             android:layout_width="wrap_content"
@@ -20,7 +28,7 @@
             android:background="@mipmap/ic_brain_round"
             android:onClick="backToMain"/>
 
-    </com.google.android.material.appbar.AppBarLayout>
+    </FrameLayout>
 
     <TextView
         android:layout_width="match_parent"
