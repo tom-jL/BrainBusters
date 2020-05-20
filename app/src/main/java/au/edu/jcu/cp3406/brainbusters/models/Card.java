@@ -8,9 +8,9 @@ public class Card implements Comparable<Card> {
     boolean paired;
 
     int id;
-    Suit suit;
-    Rank rank;
-    String fileName;
+    private Suit suit;
+    private Rank rank;
+    private String fileName;
 
 
     Card(int id) {
@@ -21,7 +21,7 @@ public class Card implements Comparable<Card> {
         setFileName();
     }
 
-    public Card(int id, boolean paired) {
+    Card(int id, boolean paired) {
         this.id = id;
         this.paired = paired;
         rank = Rank.values()[id % 13];

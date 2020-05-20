@@ -16,13 +16,11 @@ import android.widget.GridLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import au.edu.jcu.cp3406.brainbusters.ImageManager;
 import au.edu.jcu.cp3406.brainbusters.MainActivity;
 import au.edu.jcu.cp3406.brainbusters.R;
 import au.edu.jcu.cp3406.brainbusters.ShakeSensor;
-import au.edu.jcu.cp3406.brainbusters.StatsDatabaseHelper;
 import au.edu.jcu.cp3406.brainbusters.models.Card;
 import au.edu.jcu.cp3406.brainbusters.models.Memory;
 import au.edu.jcu.cp3406.brainbusters.views.CardView;
@@ -33,22 +31,22 @@ import au.edu.jcu.cp3406.brainbusters.views.CardView;
  */
 public class MemoryFragment extends Fragment {
 
-    Memory memory;
-    ImageManager imageManager;
-    GridLayout memoryGrid;
-    int colSize;
-    int rowSize;
-    float cardHeight;
-    float cardWidth;
+    private Memory memory;
+    private ImageManager imageManager;
+    private GridLayout memoryGrid;
+    private int colSize;
+    private int rowSize;
+    private float cardHeight;
+    private float cardWidth;
 
-    CardView guessCard;
-    Handler cardHandler;
+    private CardView guessCard;
+    private Handler cardHandler;
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private ShakeSensor shakeSensor;
 
-    private long dataBaseID = 2;
+    private static long dataBaseID = 2;
 
     public MemoryFragment() {
         // Required empty public constructor
@@ -56,7 +54,7 @@ public class MemoryFragment extends Fragment {
 
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cardHandler = new Handler();
         guessCard = null;
@@ -70,12 +68,12 @@ public class MemoryFragment extends Fragment {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 
         float screenWidth = (float) displayMetrics.widthPixels;
-        float screenHeight = (float) ((float) displayMetrics.heightPixels);
+        float screenHeight = (float) displayMetrics.heightPixels;
         int orientation = getResources().getConfiguration().orientation;
         cardWidth = screenWidth / 5;
         cardHeight = (float) ((screenHeight * 0.8) / 5);
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Log.i("MemoryFragment.onCreate","Orientation Landscape");
+            Log.i("MemoryFragment.onCreate", "Orientation Landscape");
             cardWidth = screenWidth / 13;
             cardHeight = (float) (screenHeight * 0.8 / 3);
             colSize = 2;
@@ -86,20 +84,21 @@ public class MemoryFragment extends Fragment {
         }
 
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+        assert sensorManager != null;
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(shakeSensor, accelerometer, SensorManager.SENSOR_DELAY_UI);
         shakeSensor = new ShakeSensor();
+        sensorManager.registerListener(shakeSensor, accelerometer, SensorManager.SENSOR_DELAY_UI);
         shakeSensor.setOnShakeListener(new ShakeSensor.OnShakeListener() {
             @Override
-            public void onShake(int count) {
-                Log.i("Sensor", "Device was shaked");
-                if(count > 2 && memoryGrid != null){
+            public void onShake(int count) throws java.lang.InstantiationException, IllegalAccessException {
+                if (count > 2) {
+                    Log.i("Sensor", "Device was shaked");
+                    ((MainActivity) getActivity()).playShuffle();
                     memory.shuffleCards();
                     buildGrid();
                 }
             }
         });
-
 
     }
 
@@ -135,7 +134,7 @@ public class MemoryFragment extends Fragment {
         }
     }
 
-    void buildGrid() {
+    private void buildGrid() {
         memoryGrid.removeAllViewsInLayout();
         int index = 0;
         for (int row = 0; row < colSize && index < colSize * rowSize; row++) {
@@ -164,7 +163,7 @@ public class MemoryFragment extends Fragment {
         //((ViewPager)memoryGrid.getParent()).setPageMargin(1);
     }
 
-    public void selectCard(final CardView cardView) {
+    private void selectCard(final CardView cardView) {
         final Card card = cardView.getCard();
         if (cardView != guessCard && !card.isPaired()) {
             cardView.showCard();
@@ -174,7 +173,8 @@ public class MemoryFragment extends Fragment {
                 if (card.compareTo(guessCard.getCard()) == 0) {
                     card.setPaired(true);
                     guessCard.getCard().setPaired(true);
-                    ((MainActivity)getActivity()).updateStat(dataBaseID);
+                    ((MainActivity) getActivity()).updateStat(dataBaseID);
+                    ((MainActivity) getActivity()).playWin();
                 } else {
                     final CardView flipCard = guessCard;
                     Runnable hideCards = new Runnable() {
@@ -184,7 +184,7 @@ public class MemoryFragment extends Fragment {
                             cardView.hideCard();
                         }
                     };
-                    cardHandler.postDelayed(hideCards, 1200);
+                    cardHandler.postDelayed(hideCards, 1000);
                 }
                 guessCard = null;
             }

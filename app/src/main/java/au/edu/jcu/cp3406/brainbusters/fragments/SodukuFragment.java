@@ -2,8 +2,11 @@ package au.edu.jcu.cp3406.brainbusters.fragments;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -20,9 +23,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import au.edu.jcu.cp3406.brainbusters.AudioManager;
 import au.edu.jcu.cp3406.brainbusters.MainActivity;
 import au.edu.jcu.cp3406.brainbusters.R;
+import au.edu.jcu.cp3406.brainbusters.ShakeSensor;
 import au.edu.jcu.cp3406.brainbusters.StatsDatabaseHelper;
+import au.edu.jcu.cp3406.brainbusters.models.Memory;
 import au.edu.jcu.cp3406.brainbusters.models.Soduku;
 import au.edu.jcu.cp3406.brainbusters.views.NumberView;
 
@@ -32,21 +38,30 @@ import au.edu.jcu.cp3406.brainbusters.views.NumberView;
  */
 public class SodukuFragment extends Fragment implements View.OnFocusChangeListener {
 
-    Soduku soduku;
-    float numberViewWidth;
+    private Soduku soduku;
+    private float numberViewWidth;
     private GridLayout sodukuGrid;
+    private Handler handler;
+    private Runnable restart;
 
 
-    private long dataBaseID = 0;
+    private static long dataBaseID = 0;
 
     public SodukuFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        handler = new Handler();
+        restart = new Runnable() {
+            @Override
+            public void run() {
+                soduku = new Soduku();
+                buildGrid();
+            }
+        };
         soduku = new Soduku();
         if (savedInstanceState != null) {
             soduku.loadState(savedInstanceState.getIntArray("state"));
@@ -65,6 +80,7 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
             float screenWidth = (float) displayMetrics.widthPixels;
             numberViewWidth = screenWidth / 9;
         }
+
 
 
 
@@ -87,7 +103,7 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
         }
     }
 
-    void buildGrid() {
+    private void buildGrid() {
         sodukuGrid.removeAllViewsInLayout();
         for (int row = 0; row < soduku.getGame().length; row++) {
             for (int col = 0; col < soduku.getRow(row).length; col++) {
@@ -128,6 +144,9 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
             if (soduku.isValid()) {
                 Log.i("State", "You have solved the puzzle.");
                 ((MainActivity)getActivity()).updateStat(dataBaseID);
+                ((MainActivity)getActivity()).playWin();
+                handler.postDelayed(restart, 1000);
+
 
             } else {
                 Log.i("State", soduku.toString());

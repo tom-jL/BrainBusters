@@ -19,7 +19,7 @@ public class ImageManager {
     }
 
     public Bitmap getMineImage(int id) {
-        InputStream stream = null;
+        InputStream stream;
         try {
             stream = assetManager.open("mines/" + id + ".png");
             return BitmapFactory.decodeStream(stream);
@@ -32,7 +32,7 @@ public class ImageManager {
 
     public Bitmap getCardImage(Card card) {
         String fileName = card.isPaired() ? card.getFileName() + ".png" : "blue_back.png";
-        InputStream stream = null;
+        InputStream stream;
         try {
             stream = assetManager.open("cards/" + fileName);
             return BitmapFactory.decodeStream(stream);
@@ -45,7 +45,7 @@ public class ImageManager {
 
     public Bitmap getCardFace(Card card) {
         String fileName = card.getFileName() + ".png";
-        InputStream stream = null;
+        InputStream stream;
         try {
             stream = assetManager.open("cards/" + fileName);
             return BitmapFactory.decodeStream(stream);
@@ -57,7 +57,7 @@ public class ImageManager {
 
     public Bitmap getCardBack() {
         String fileName = "blue_back.png";
-        InputStream stream = null;
+        InputStream stream;
         try {
             stream = assetManager.open("cards/" + fileName);
             return BitmapFactory.decodeStream(stream);
@@ -69,7 +69,7 @@ public class ImageManager {
 
 
     public Bitmap getBlankMine() {
-        InputStream stream = null;
+        InputStream stream;
         try {
             stream = assetManager.open("mines/" + 10 + ".png");
             return BitmapFactory.decodeStream(stream);

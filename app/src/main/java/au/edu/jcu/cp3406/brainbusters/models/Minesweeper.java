@@ -1,6 +1,5 @@
 package au.edu.jcu.cp3406.brainbusters.models;
 
-
 import java.util.Arrays;
 import java.util.Random;
 
@@ -22,7 +21,7 @@ public class Minesweeper {
 
     }
 
-    public void newGame() {
+    private void newGame() {
         int gridSize = (difficulty.ordinal() + 1) * 8;
         grid = new int[gridSize][8];
         for (int i = 0; i < Math.pow(gridSize, 2) / 8; i++) {
@@ -100,10 +99,14 @@ public class Minesweeper {
     @Override
     public String toString() {
         StringBuilder gridArray = new StringBuilder();
-        for (int i = 0; i < grid.length; i++) {
-            gridArray.append(Arrays.toString(grid[i])).append("\n");
+        for (int[] ints : grid) {
+            gridArray.append(Arrays.toString(ints)).append("\n");
         }
         return gridArray.toString();
+    }
+
+    public Enum getDifficulty() {
+        return difficulty;
     }
 
     public enum Difficulty {

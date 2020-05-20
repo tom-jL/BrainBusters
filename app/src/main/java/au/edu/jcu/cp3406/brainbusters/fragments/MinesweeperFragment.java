@@ -1,9 +1,13 @@
 package au.edu.jcu.cp3406.brainbusters.fragments;
 
+import android.content.Context;
 import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +22,9 @@ import androidx.viewpager.widget.ViewPager;
 import au.edu.jcu.cp3406.brainbusters.ImageManager;
 import au.edu.jcu.cp3406.brainbusters.MainActivity;
 import au.edu.jcu.cp3406.brainbusters.R;
-import au.edu.jcu.cp3406.brainbusters.StatsDatabaseHelper;
+import au.edu.jcu.cp3406.brainbusters.ShakeSensor;
 import au.edu.jcu.cp3406.brainbusters.models.Minesweeper;
+import au.edu.jcu.cp3406.brainbusters.models.Soduku;
 import au.edu.jcu.cp3406.brainbusters.views.MineView;
 
 
@@ -28,12 +33,14 @@ import au.edu.jcu.cp3406.brainbusters.views.MineView;
  */
 public class MinesweeperFragment extends Fragment {
 
-    Handler uiHandler = new Handler();
+    private Minesweeper minesweeper;
+    private ImageManager imageManager;
+    private GridLayout mineGrid;
+    private float mineViewWidth;
 
-    Minesweeper minesweeper;
-    ImageManager imageManager;
-    GridLayout mineGrid;
-    float mineViewWidth;
+    Runnable restart;
+    Handler handler;
+
 
     private long dataBaseID = 1;
 
@@ -43,9 +50,16 @@ public class MinesweeperFragment extends Fragment {
 
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        uiHandler = new Handler();
+        handler = new Handler();
+        restart = new Runnable() {
+            @Override
+            public void run() {
+                minesweeper = new Minesweeper();
+                buildGrid();
+            }
+        };
         minesweeper = new Minesweeper();
         if (savedInstanceState != null) {
             minesweeper.loadState(savedInstanceState.getIntArray("state"));
@@ -61,6 +75,7 @@ public class MinesweeperFragment extends Fragment {
         } else {
             mineViewWidth = screenWidth / 8;
         }
+
 
 
     }
@@ -106,17 +121,20 @@ public class MinesweeperFragment extends Fragment {
                     public void onClick(View mineView) {
                         switch (col) {
                             case 9:
+                                ((MainActivity) getActivity()).playExplode();
                                 revealAll();
+                                handler.postDelayed(restart, 3000);
                                 break;
                             case 0:
                                 revealBlock(finalRowCount, finalColCount);
                                 break;
                             default:
                                 ((MineView) mineView).revealMine(col);
-                                if(sweptMines()){
-                                    ((MainActivity)getActivity()).updateStat(dataBaseID);
-                                }
-
+                        }
+                        if (sweptMines()) {
+                            ((MainActivity) getActivity()).updateStat(dataBaseID);
+                            ((MainActivity) getActivity()).playWin();
+                            handler.postDelayed(restart, 3000);
                         }
                     }
                 });
@@ -132,25 +150,21 @@ public class MinesweeperFragment extends Fragment {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             float screenWidth = (float) displayMetrics.widthPixels;
-            ((ViewPager)mineGrid.getParent()).setPageMargin((int) (screenWidth/2-(mineViewWidth*9)/2));
+            ((ViewPager) mineGrid.getParent()).setPageMargin((int) (screenWidth / 2 - (mineViewWidth * 9) / 2));
         }
     }
 
-    public boolean sweptMines(){
-        int index = 0;
-        for (int row = 0; row < minesweeper.getGrid().length; row++) {
-            for (int col = 0; col < minesweeper.getGrid()[row].length; col++) {
-                if(!((MineView)mineGrid.getChildAt(index)).isRevealed() && !minesweeper.isBomb(row,col)){
-                    return false;
-                } else if (((MineView)mineGrid.getChildAt(index)).isRevealed() && minesweeper.isBomb(row,col)){
-                    return false;
-                }
+    private boolean sweptMines() {
+        int count = 0;
+        for(int index = 0; index < mineGrid.getChildCount(); index++){
+            if(((MineView) mineGrid.getChildAt(index)).isRevealed()){
+                count++;
             }
         }
-        return true;
+        return count == (64 - (minesweeper.getDifficulty().ordinal() + 1) * 8);
     }
 
-    public void revealAll() {
+    private void revealAll() {
         int index = 0;
         for (int row = 0; row < minesweeper.getGrid().length; row++) {
             for (int col = 0; col < minesweeper.getGrid()[row].length; col++) {
@@ -161,7 +175,7 @@ public class MinesweeperFragment extends Fragment {
         }
     }
 
-    public void revealBlock(int row, int col) {
+    private void revealBlock(int row, int col) {
 
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {

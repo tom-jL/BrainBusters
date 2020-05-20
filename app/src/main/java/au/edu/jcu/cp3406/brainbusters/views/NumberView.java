@@ -62,6 +62,7 @@ public class NumberView extends androidx.appcompat.widget.AppCompatEditText {
             number = -1;
             setText("");
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
             imm.hideSoftInputFromWindow(getWindowToken(), 0);
         } else {
             try {

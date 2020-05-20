@@ -7,8 +7,8 @@ import java.util.Collections;
 
 public class Memory {
 
-    public static final int DECK_SIZE = 26;
-    ArrayList<Card> cards;
+    private static final int DECK_SIZE = 26;
+    private ArrayList<Card> cards;
 
     public Memory() {
         cards = new ArrayList<>();

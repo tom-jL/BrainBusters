@@ -12,7 +12,7 @@ public class SodukuModelTest {
 
     @Test
     public void soduku(){
-        Soduku soduku = new Soduku(Soduku.Difficulty.easy);
+        Soduku soduku = new Soduku();
         soduku.newGame();
         System.out.println(soduku);
         assertTrue(soduku.isValid());

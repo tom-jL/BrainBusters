@@ -9,16 +9,11 @@ import java.util.Random;
 public class Soduku {
 
     private Random random = new Random();
-    private Difficulty difficulty;
     private int[][] game;
 
 
     public Soduku() {
         game = new int[9][9];
-    }
-
-    public Soduku(Difficulty difficulty) {
-        this.difficulty = difficulty;
     }
 
     private static int getBlockIndex(int row, int col) {
@@ -36,10 +31,12 @@ public class Soduku {
 
     private static boolean isDistinct(int[] array) {
         for (int i = 0; i < array.length; i++) {
-            for (int j = i + 1; j < array.length; j++) {
-                if ((array[i] == array[j]) && array[i] != 0) {
-                    return false;
-                }
+            for (int j = 0; j < array.length; j++) {
+
+                    if ( (i != j && array[i] == array[j] && array[i] != 0) || array[j] == -1) {
+                        return false;
+                    }
+
             }
         }
         return true;
@@ -92,7 +89,6 @@ public class Soduku {
     }
 
     public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
         int hidden = (difficulty.ordinal()+1) * 10;
         for (int i = hidden; i > 0; --i) {
             int row = random.nextInt(9);
@@ -113,7 +109,7 @@ public class Soduku {
         return game[index];
     }
 
-    public int[] getColumn(int index) {
+    private int[] getColumn(int index) {
         int[] col = new int[9];
         for (int i = 0; i < 9; i++) {
             col[i] = game[i][index];
@@ -121,14 +117,12 @@ public class Soduku {
         return col;
     }
 
-    public int[] getBlock(int index) {
+    private int[] getBlock(int index) {
         int[] block = new int[9];
         int blockColumn = (index % 3) * 3;
         int blockRow = index < 3 ? 0 : index < 6 ? 3 : index < 9 ? 6 : 0;
         for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3; col++) {
-                block[row * 3 + col] = game[blockRow + row][blockColumn + col];
-            }
+            System.arraycopy(game[blockRow + row], blockColumn, block, row * 3, 3);
         }
         return block;
     }

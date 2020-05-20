@@ -11,9 +11,9 @@ public class StatsDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "STATS";
     private static final int DB_VERSION = 1;
-    public static final String TABLE_NAME = "STAT";
+    static final String TABLE_NAME = "STAT";
 
-    public StatsDatabaseHelper(Context context) {
+    StatsDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
@@ -42,15 +42,14 @@ public class StatsDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public void insertStat(long id) {
-        Log.i("StatsDatabaseHelper","Inserting new Statistic");
+    void insertStat(long id) {
+        Log.i("StatsDatabaseHelper","Inserting new Stat");
         SQLiteDatabase db = getWritableDatabase();
-
         try {
             db.execSQL("UPDATE " + "STAT" + " SET " + "COUNT" + "=" + "COUNT" + "+1" + " WHERE " + "_id = ?",
                     new String[]{String.valueOf(id)});
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         db.close();
     }

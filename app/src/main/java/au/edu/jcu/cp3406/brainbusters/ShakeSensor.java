@@ -19,7 +19,7 @@ public class ShakeSensor implements SensorEventListener {
     }
 
     public interface OnShakeListener {
-        public void onShake(int count);
+        void onShake(int count) throws InstantiationException, IllegalAccessException;
     }
 
     @Override
@@ -48,7 +48,13 @@ public class ShakeSensor implements SensorEventListener {
                 shakeTimeStamp = now;
                 shakeCount++;
 
-                onShakeListener.onShake(shakeCount);
+                try {
+                    onShakeListener.onShake(shakeCount);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
