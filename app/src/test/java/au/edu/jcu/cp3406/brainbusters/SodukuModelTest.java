@@ -12,12 +12,14 @@ public class SodukuModelTest {
 
     @Test
     public void soduku(){
-        Soduku soduku = new Soduku();
-        soduku.newGame();
-        System.out.println(soduku);
-        assertTrue(soduku.isValid());
-        soduku.setDifficulty(Soduku.Difficulty.easy);
-        System.out.println(soduku);
-        Assert.assertFalse(soduku.isValid());
+        for(int i = 0; i < 100; i++) {
+            Soduku soduku = new Soduku(null);
+            soduku.newGame();
+            System.out.println(soduku);
+            assertTrue(soduku.isValid());
+            soduku.setDifficulty(Soduku.Difficulty.easy);
+            System.out.println(soduku);
+            Assert.assertFalse(soduku.isValid());
+        }
     }
 }

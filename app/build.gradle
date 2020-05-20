@@ -24,6 +24,7 @@ android {
 }
 
 dependencies {
+    api 'org.twitter4j:twitter4j-core:4.0.7'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
     implementation 'androidx.appcompat:appcompat:1.1.0'

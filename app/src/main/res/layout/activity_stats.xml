@@ -25,7 +25,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sodukus Busted"
+        android:text="@string/sodukus_busted"
         android:layout_weight="1"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
@@ -39,7 +39,7 @@
         android:textAlignment="center"
 
         android:textSize="50sp"
-        android:text="0"
+        android:text="@string/_0"
         android:textColor="#FFFFFF"
         android:background="@color/colorPrimary" />
 
@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Minesweepers Busted"
+        android:text="@string/minesweepers_busted"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:background="#FFFF"
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="50sp"
-        android:text="0"
+        android:text="@string/_0"
         android:textColor="#FFFFFF"
         android:background="@color/colorPrimary" />
 
@@ -68,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:text="Card Pairs Found"
+        android:text="@string/card_pairs_found"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:background="#FFFF"
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="50sp"
-        android:text="0"
+        android:text="@string/_0"
         android:textColor="#FFFFFF"
         android:background="@color/colorPrimary" />
 

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -100,6 +101,7 @@ public class MemoryFragment extends Fragment {
             }
         });
 
+
     }
 
     @Override
@@ -113,6 +115,7 @@ public class MemoryFragment extends Fragment {
     public void onResume() {
         super.onResume();
         sensorManager.registerListener(shakeSensor, accelerometer, SensorManager.SENSOR_DELAY_UI);
+        Toast.makeText(getContext(),"Shake the phone to shuffle the deck.",Toast.LENGTH_SHORT).show();
     }
 
     @Override

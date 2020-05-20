@@ -1,5 +1,7 @@
 package au.edu.jcu.cp3406.brainbusters.models;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -12,8 +14,14 @@ public class Soduku {
     private int[][] game;
 
 
-    public Soduku() {
+    public Soduku(Bundle savedInstanceState) {
         game = new int[9][9];
+        if (savedInstanceState != null) {
+            loadState(savedInstanceState.getIntArray("state"));
+        } else {
+            newGame();
+            setDifficulty(Soduku.Difficulty.easy);
+        }
     }
 
     private static int getBlockIndex(int row, int col) {
@@ -31,9 +39,9 @@ public class Soduku {
 
     private static boolean isDistinct(int[] array) {
         for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array.length; j++) {
+            for (int j = i+1; j < array.length; j++) {
 
-                    if ( (i != j && array[i] == array[j] && array[i] != 0) || array[j] == -1) {
+                    if ((array[i] == array[j] && array[i] != 0) || array[j] == -1) {
                         return false;
                     }
 

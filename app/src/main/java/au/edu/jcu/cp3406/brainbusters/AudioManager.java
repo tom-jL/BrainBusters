@@ -22,7 +22,7 @@ public class AudioManager {
     void playSound(int sampleId) {
         if (!streams.containsKey(sampleId)) return;
         assert streams.get(sampleId) != null;
-        soundPool.play(streams.get(sampleId), 1, 1, 1, 0, 1);
+        soundPool.play(streams.get(sampleId), 0.5f, 0.5f, 1, 0, 1);
     }
 
     void resume() {

@@ -3,6 +3,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="brainbusters">BrainBusters</string>
+    <string name="minesweepers_busted">Mines swept</string>
+    <string name="_0">0</string>
+    <string name="card_pairs_found">Card Pairs Found</string>
+    <string name="sodukus_busted">Sodukus Busted</string>
 
 
 </resources>

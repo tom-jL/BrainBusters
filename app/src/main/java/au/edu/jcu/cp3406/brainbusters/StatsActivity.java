@@ -7,9 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.conf.ConfigurationBuilder;
 
 public class StatsActivity extends AppCompatActivity {
 
@@ -61,5 +68,31 @@ public class StatsActivity extends AppCompatActivity {
     }
 
     public void shareStats(View view) {
+
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true)
+                .setOAuthConsumerKey("COJmbfyLrsQtN3zmESIzXjZQf")
+                .setOAuthConsumerSecret("Yd4Sz5d3GPCEZNdujnIIxHJaiwIVpUZWlKDCOkJg9QF0MpNOo6")
+                .setOAuthAccessToken("1250966422458527745-XBMhOAaSDDUHggUfWwNxVpzm31znBd")
+                .setOAuthAccessTokenSecret("Z8SM49sY8fFdHu6flZT5GTzzxFrLlAQHHYbx6pwrJtz37");
+        TwitterFactory tf = new TwitterFactory(cb.build());
+        final Twitter twitter = tf.getInstance();
+
+        final String string = "I've solved " + stats[0] +" Soduku puzzles, "+stats[1]+" Minesweeper puzzles and found "+stats[2]+" pairs of cards. -BrainBuster";
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Log.i("twitter",twitter.getOAuthAccessToken().toString());
+                    twitter.updateStatus(string);
+                } catch (TwitterException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+
+
     }
 }
