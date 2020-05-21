@@ -34,16 +34,17 @@ tools:context=".MainActivity">
 
 </FrameLayout>
 
-<androidx.viewpager.widget.ViewPager
-    android:id="@+id/gamePager"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center">
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/gamePager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</androidx.viewpager.widget.ViewPager>
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@color/colorPrimary">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </androidx.viewpager.widget.ViewPager>
 
 </LinearLayout>

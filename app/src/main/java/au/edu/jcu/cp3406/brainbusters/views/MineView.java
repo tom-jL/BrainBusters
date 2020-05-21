@@ -9,6 +9,8 @@ import au.edu.jcu.cp3406.brainbusters.ImageManager;
 public class MineView extends AppCompatImageView {
 
     boolean revealed;
+    boolean flagged;
+    boolean unflagged;
     ImageManager imageManager;
 
 
@@ -19,6 +21,8 @@ public class MineView extends AppCompatImageView {
     public MineView(Context context, ImageManager imageManager) {
         super(context);
         revealed = false;
+        flagged = false;
+        unflagged = false;
         this.imageManager = imageManager;
         setImageBitmap(imageManager.getBlankMine());
     }
@@ -28,7 +32,27 @@ public class MineView extends AppCompatImageView {
         setImageBitmap(imageManager.getMineImage(id));
     }
 
+    public void flagMine(){
+        if(!revealed && !flagged) {
+            setImageBitmap(imageManager.getMineImage(11));
+            flagged = true;
+            unflagged = false;
+        } else if (!revealed){
+            flagged = false;
+            unflagged = true;
+            setImageBitmap(imageManager.getMineImage(10));
+        }
+    }
+
+    public boolean isFlagged() {
+        return flagged;
+    }
+
     public boolean isRevealed() {
         return revealed;
+    }
+
+    public boolean isUnFlagged() {
+        return unflagged;
     }
 }

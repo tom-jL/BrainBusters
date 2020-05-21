@@ -1,5 +1,6 @@
 package au.edu.jcu.cp3406.brainbusters.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
@@ -9,6 +10,7 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
@@ -98,6 +100,7 @@ public class MinesweeperFragment extends Fragment {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void buildGrid() {
         mineGrid.removeAllViewsInLayout();
         int rowCount = 0;
@@ -105,7 +108,7 @@ public class MinesweeperFragment extends Fragment {
         for (int[] row : minesweeper.getGrid()) {
             for (final int col : row) {
                 //final CardView cardView = new CardView(mineGrid.getContext(), minesweeper.getCard(index), imageManager);
-                MineView mineView = new MineView(mineGrid.getContext(), imageManager);
+                final MineView mineView = new MineView(mineGrid.getContext(), imageManager);
                 mineView.setImageBitmap(imageManager.getBlankMine());
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.width = (int) mineViewWidth;
@@ -113,12 +116,29 @@ public class MinesweeperFragment extends Fragment {
                 params.columnSpec = GridLayout.spec(colCount);
                 params.rowSpec = GridLayout.spec(rowCount);
                 mineView.setLayoutParams(params);
-
                 final int finalColCount = colCount;
                 final int finalRowCount = rowCount;
+                final Runnable flagMine = new Runnable() {
+                    @Override
+                    public void run() {
+                        mineView.flagMine();
+
+                    }
+                };
+                mineView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if(event.getAction() == MotionEvent.ACTION_DOWN){
+                            handler.postDelayed(flagMine, 1000);
+                        } else if (event.getAction() == MotionEvent.ACTION_UP){
+                            handler.removeCallbacks(flagMine);
+                        }
+                        return true;
+                    }
+                });
                 mineView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View mineView) {
+                    public void onClick(View v) {
                         switch (col) {
                             case 9:
                                 ((MainActivity) getActivity()).playExplode();
@@ -138,7 +158,6 @@ public class MinesweeperFragment extends Fragment {
                         }
                     }
                 });
-
                 mineGrid.addView(mineView);
                 colCount++;
             }
