@@ -22,7 +22,6 @@ public class MineView extends AppCompatImageView {
         super(context);
         revealed = false;
         flagged = false;
-        unflagged = false;
         this.imageManager = imageManager;
         setImageBitmap(imageManager.getBlankMine());
     }
@@ -36,10 +35,8 @@ public class MineView extends AppCompatImageView {
         if(!revealed && !flagged) {
             setImageBitmap(imageManager.getMineImage(11));
             flagged = true;
-            unflagged = false;
         } else if (!revealed){
             flagged = false;
-            unflagged = true;
             setImageBitmap(imageManager.getMineImage(10));
         }
     }

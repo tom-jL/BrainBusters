@@ -39,6 +39,7 @@ public class MinesweeperFragment extends Fragment {
     private ImageManager imageManager;
     private GridLayout mineGrid;
     private float mineViewWidth;
+    private boolean flagging = false;
 
     Runnable restart;
     Handler handler;
@@ -122,7 +123,7 @@ public class MinesweeperFragment extends Fragment {
                     @Override
                     public void run() {
                         mineView.flagMine();
-
+                        flagging = true;
                     }
                 };
                 mineView.setOnTouchListener(new View.OnTouchListener() {
@@ -133,29 +134,32 @@ public class MinesweeperFragment extends Fragment {
                         } else if (event.getAction() == MotionEvent.ACTION_UP){
                             handler.removeCallbacks(flagMine);
                         }
-                        return true;
+                        return false;
                     }
                 });
                 mineView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        switch (col) {
-                            case 9:
-                                ((MainActivity) getActivity()).playExplode();
-                                revealAll();
+                        if(!flagging) {
+                            switch (col) {
+                                case 9:
+                                    ((MainActivity) getActivity()).playExplode();
+                                    revealAll();
+                                    handler.postDelayed(restart, 3000);
+                                    break;
+                                case 0:
+                                    revealBlock(finalRowCount, finalColCount);
+                                    break;
+                                default:
+                                    ((MineView) mineView).revealMine(col);
+                            }
+                            if (sweptMines()) {
+                                ((MainActivity) getActivity()).updateStat(dataBaseID);
+                                ((MainActivity) getActivity()).playWin();
                                 handler.postDelayed(restart, 3000);
-                                break;
-                            case 0:
-                                revealBlock(finalRowCount, finalColCount);
-                                break;
-                            default:
-                                ((MineView) mineView).revealMine(col);
+                            }
                         }
-                        if (sweptMines()) {
-                            ((MainActivity) getActivity()).updateStat(dataBaseID);
-                            ((MainActivity) getActivity()).playWin();
-                            handler.postDelayed(restart, 3000);
-                        }
+                        flagging = false;
                     }
                 });
                 mineGrid.addView(mineView);
