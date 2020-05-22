@@ -25,6 +25,18 @@ public class AudioManager {
         soundPool.play(streams.get(sampleId), 0.5f, 0.5f, 1, 0, 1);
     }
 
+    public void playWin() {
+        playSound(R.raw.win);
+    }
+
+    public void playShuffle() {
+        playSound(R.raw.shuffle);
+    }
+
+    public void playExplode() {
+        playSound(R.raw.explode);
+    }
+
     void resume() {
         soundPool.autoResume();
     }

@@ -5,6 +5,11 @@ import android.content.Context;
 import au.edu.jcu.cp3406.brainbusters.ImageManager;
 import au.edu.jcu.cp3406.brainbusters.models.Card;
 
+
+/**
+ * Subclass of an image view. Displays
+ * a card, stores card model object.
+ */
 public class CardView extends androidx.appcompat.widget.AppCompatImageView {
 
     Card card;

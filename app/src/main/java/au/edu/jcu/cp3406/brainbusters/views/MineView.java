@@ -26,6 +26,7 @@ public class MineView extends AppCompatImageView {
         setImageBitmap(imageManager.getBlankMine());
     }
 
+
     public void revealMine(int id) {
         revealed = true;
         setImageBitmap(imageManager.getMineImage(id));

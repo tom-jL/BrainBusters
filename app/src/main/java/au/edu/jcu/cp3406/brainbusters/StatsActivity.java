@@ -87,13 +87,13 @@ public class StatsActivity extends AppCompatActivity {
             public void run() {
                 try {
                     twitter.updateStatus(string);
-                    Toast.makeText(context,"Posted tweet!",Toast.LENGTH_SHORT).show();
+
                 } catch (TwitterException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
-
+        Toast.makeText(context,"Posted tweet!",Toast.LENGTH_SHORT).show();
 
 
     }

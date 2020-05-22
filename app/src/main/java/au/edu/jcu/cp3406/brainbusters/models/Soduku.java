@@ -8,6 +8,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+
+/**
+ * Soduku game class. Randomly generates
+ * soduku puzzles using brute force. Randomly
+ * picks numbers for each cell in the array
+ * and checks if the number works.
+ */
 public class Soduku {
 
     private Random random = new Random();

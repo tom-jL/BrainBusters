@@ -53,7 +53,13 @@ public class MemoryFragment extends Fragment {
         // Required empty public constructor
     }
 
-
+    /**
+     * Initial creation of fragment, initialize memory game object and saved
+     * game state, process orientation of device and register the
+     * shake listener for starting a new game.
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +100,7 @@ public class MemoryFragment extends Fragment {
             public void onShake(int count) throws java.lang.InstantiationException, IllegalAccessException {
                 if (count > 2) {
                     Log.i("Sensor", "Device was shaked");
-                    ((MainActivity) getActivity()).playShuffle();
+                    ((MainActivity) getActivity()).getAudioManager().playShuffle();
                     memory.shuffleCards();
                     buildGrid();
                 }
@@ -115,7 +121,7 @@ public class MemoryFragment extends Fragment {
     public void onResume() {
         super.onResume();
         sensorManager.registerListener(shakeSensor, accelerometer, SensorManager.SENSOR_DELAY_UI);
-        Toast.makeText(getContext(),"Shake the phone to shuffle the deck.",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Shake the phone to shuffle the deck.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -136,6 +142,11 @@ public class MemoryFragment extends Fragment {
             buildGrid();
         }
     }
+
+    /**
+     * Create card views for each card in the game model
+     * and add them to the fragment's grid view.
+     */
 
     private void buildGrid() {
         memoryGrid.removeAllViewsInLayout();
@@ -163,9 +174,15 @@ public class MemoryFragment extends Fragment {
             }
         }
 
-        //((ViewPager)memoryGrid.getParent()).setPageMargin(1);
     }
 
+    /**
+     * Called when a user clicks on a card view. Check to see if
+     * the card already belongs to a pair or has been clicked on.
+     * Process pairing and hiding of failed pairs.
+     *
+     * @param cardView
+     */
     private void selectCard(final CardView cardView) {
         final Card card = cardView.getCard();
         if (cardView != guessCard && !card.isPaired()) {
@@ -177,7 +194,7 @@ public class MemoryFragment extends Fragment {
                     card.setPaired(true);
                     guessCard.getCard().setPaired(true);
                     ((MainActivity) getActivity()).updateStat(dataBaseID);
-                    ((MainActivity) getActivity()).playWin();
+                    ((MainActivity) getActivity()).getAudioManager().playWin();
                 } else {
                     final CardView flipCard = guessCard;
                     Runnable hideCards = new Runnable() {
@@ -194,6 +211,11 @@ public class MemoryFragment extends Fragment {
         }
     }
 
+    /**
+     * Saves the order of the game model and all the pairs.
+     *
+     * @param outState
+     */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putIntArray("orderState", memory.saveOrderState());

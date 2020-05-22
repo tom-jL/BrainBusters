@@ -15,7 +15,6 @@ import android.widget.GridLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import au.edu.jcu.cp3406.brainbusters.MainActivity;
 import au.edu.jcu.cp3406.brainbusters.R;
@@ -26,7 +25,8 @@ import au.edu.jcu.cp3406.brainbusters.views.NumberView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SodukuFragment extends Fragment implements View.OnFocusChangeListener {
+public class SodukuFragment extends Fragment implements View.OnFocusChangeListener, View.OnClickListener {
+
 
     private Soduku soduku;
     private float numberViewWidth;
@@ -41,6 +41,13 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
         // Required empty public constructor
     }
 
+
+    /**
+     * Initial creation of fragment, initialize memory game object and saved
+     * game state, process orientation of device.
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +92,12 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
         }
     }
 
+    /**
+     * Create number views for each cell in the game model
+     * and add them to the fragment's grid view.
+     * <p>
+     * //TODO Setup margins for grid view in landscape.
+     */
     private void buildGrid() {
         sodukuGrid.removeAllViewsInLayout();
         for (int row = 0; row < soduku.getGame().length; row++) {
@@ -96,16 +109,11 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
                 params.columnSpec = GridLayout.spec(col);
                 params.rowSpec = GridLayout.spec(row);
                 numberView.setLayoutParams(params);
-                numberView.setTextSize((float) (numberViewWidth * 0.2));
+                numberView.setTextSize((float) (numberViewWidth * 0.15));
                 numberView.setOnFocusChangeListener(this);
+                numberView.setOnClickListener(this);
                 sodukuGrid.addView(numberView);
             }
-        }
-        int orientation = getResources().getConfiguration().orientation;
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            float screenWidth = (float) displayMetrics.widthPixels;
-            ((ViewPager) sodukuGrid.getParent()).setPageMargin((int) (screenWidth / 2 - ((numberViewWidth * 9) / 2)));
         }
     }
 
@@ -121,17 +129,34 @@ public class SodukuFragment extends Fragment implements View.OnFocusChangeListen
         if (!hasFocus) {
             NumberView numberView = (NumberView) v;
             soduku.setCell(numberView.getRow(), numberView.getCol(), numberView.getNumber());
-            if (soduku.isValid()) {
-                Log.i("State", "You have solved the puzzle.");
-                ((MainActivity) getActivity()).updateStat(dataBaseID);
-                ((MainActivity) getActivity()).playWin();
-                handler.postDelayed(restart, 1000);
-            }
-
         }
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
+    }
+
+    /**
+     * Called when a number view is clicked.
+     * Set the soduku model cell number.
+     * Check for win condition.
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+        NumberView numberView = (NumberView) v;
+        if (!v.isFocusable()) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        } else {
+            soduku.setCell(numberView.getRow(), numberView.getCol(), numberView.getNumber());
+        }
+        if (soduku.isValid()) {
+            Log.i("State", "You have solved the puzzle.");
+            ((MainActivity) getActivity()).updateStat(dataBaseID);
+            ((MainActivity) getActivity()).getAudioManager().playWin();
+            handler.postDelayed(restart, 1000);
+        }
     }
 }
 

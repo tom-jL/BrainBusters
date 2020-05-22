@@ -3,6 +3,13 @@ package au.edu.jcu.cp3406.brainbusters.models;
 import java.util.Arrays;
 import java.util.Random;
 
+
+/**
+ * Minesweeper game class.
+ * Generates 2D minesweeper arrays by
+ * randomly assigning bombs based on difficulty
+ * and calculating adjacent bombs for each cell.
+ */
 public class Minesweeper {
     //9 is a bomb!
     private Random random = new Random();

@@ -1,14 +1,10 @@
 package au.edu.jcu.cp3406.brainbusters.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.res.Configuration;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,14 +15,11 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import au.edu.jcu.cp3406.brainbusters.ImageManager;
 import au.edu.jcu.cp3406.brainbusters.MainActivity;
 import au.edu.jcu.cp3406.brainbusters.R;
-import au.edu.jcu.cp3406.brainbusters.ShakeSensor;
 import au.edu.jcu.cp3406.brainbusters.models.Minesweeper;
-import au.edu.jcu.cp3406.brainbusters.models.Soduku;
 import au.edu.jcu.cp3406.brainbusters.views.MineView;
 
 
@@ -51,7 +44,12 @@ public class MinesweeperFragment extends Fragment {
         // Required empty public constructor
     }
 
-
+    /**
+     * Initial creation of fragment, initialize minesweeper game object and saved
+     * game state, processes orientation of device.
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +78,6 @@ public class MinesweeperFragment extends Fragment {
         }
 
 
-
     }
 
     @Override
@@ -101,6 +98,13 @@ public class MinesweeperFragment extends Fragment {
         }
     }
 
+    /**
+     * Create mine views for each cell in the game model
+     * and add them to the fragment's grid view.
+     * Setup on touch and click listeners.
+     * <p>
+     * //TODO Setup margins for grid view  in landscape.
+     */
     @SuppressLint("ClickableViewAccessibility")
     private void buildGrid() {
         mineGrid.removeAllViewsInLayout();
@@ -129,9 +133,9 @@ public class MinesweeperFragment extends Fragment {
                 mineView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        if(event.getAction() == MotionEvent.ACTION_DOWN){
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
                             handler.postDelayed(flagMine, 1000);
-                        } else if (event.getAction() == MotionEvent.ACTION_UP){
+                        } else if (event.getAction() == MotionEvent.ACTION_UP) {
                             handler.removeCallbacks(flagMine);
                         }
                         return false;
@@ -140,10 +144,10 @@ public class MinesweeperFragment extends Fragment {
                 mineView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!flagging) {
+                        if (!flagging) {
                             switch (col) {
                                 case 9:
-                                    ((MainActivity) getActivity()).playExplode();
+                                    ((MainActivity) getActivity()).getAudioManager().playExplode();
                                     revealAll();
                                     handler.postDelayed(restart, 3000);
                                     break;
@@ -155,7 +159,7 @@ public class MinesweeperFragment extends Fragment {
                             }
                             if (sweptMines()) {
                                 ((MainActivity) getActivity()).updateStat(dataBaseID);
-                                ((MainActivity) getActivity()).playWin();
+                                ((MainActivity) getActivity()).getAudioManager().playWin();
                                 handler.postDelayed(restart, 3000);
                             }
                         }
@@ -169,24 +173,30 @@ public class MinesweeperFragment extends Fragment {
             rowCount++;
         }
 
-        int orientation = getResources().getConfiguration().orientation;
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            float screenWidth = (float) displayMetrics.widthPixels;
-            ((ViewPager) mineGrid.getParent()).setPageMargin((int) (screenWidth / 2 - (mineViewWidth * 9) / 2));
-        }
     }
 
+    /**
+     * Check grid to see if every cell except
+     * cells with a bomb have been revealed.
+     * User will have revealed a certain amount
+     * without losing.
+     *
+     * @return boolean
+     */
     private boolean sweptMines() {
         int count = 0;
-        for(int index = 0; index < mineGrid.getChildCount(); index++){
-            if(((MineView) mineGrid.getChildAt(index)).isRevealed()){
+        for (int index = 0; index < mineGrid.getChildCount(); index++) {
+            if (((MineView) mineGrid.getChildAt(index)).isRevealed()) {
                 count++;
             }
         }
         return count == (64 - (minesweeper.getDifficulty().ordinal() + 1) * 8);
     }
 
+    /**
+     * Called when the user clicks on a bomb.
+     * Reveals the game grid.
+     */
     private void revealAll() {
         int index = 0;
         for (int row = 0; row < minesweeper.getGrid().length; row++) {
@@ -198,6 +208,14 @@ public class MinesweeperFragment extends Fragment {
         }
     }
 
+    /**
+     * Called when a user clicks on a cell
+     * without a number. Discovers all adjacent cells
+     * recursively.
+     *
+     * @param row
+     * @param col
+     */
     private void revealBlock(int row, int col) {
 
         for (int x = -1; x < 2; x++) {

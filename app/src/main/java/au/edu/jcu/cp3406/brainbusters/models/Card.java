@@ -2,6 +2,15 @@ package au.edu.jcu.cp3406.brainbusters.models;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Cards are represented by a number from 1 to 52.
+ * Each count of 13 cards are a suit in order:
+*          Clubs,
+ *         Diamonds,
+ *         Spades,
+ *         Hearts
+ *
+ */
 
 public class Card implements Comparable<Card> {
 

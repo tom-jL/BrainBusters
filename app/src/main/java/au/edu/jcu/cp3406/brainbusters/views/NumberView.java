@@ -2,8 +2,10 @@ package au.edu.jcu.cp3406.brainbusters.views;
 
 import android.content.Context;
 import android.text.InputType;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
+import au.edu.jcu.cp3406.brainbusters.MainActivity;
 import au.edu.jcu.cp3406.brainbusters.R;
 
 
@@ -54,7 +56,6 @@ public class NumberView extends androidx.appcompat.widget.AppCompatEditText {
     public int getNumber() {
         return number;
     }
-
 
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {

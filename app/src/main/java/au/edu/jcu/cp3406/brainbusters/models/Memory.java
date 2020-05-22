@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
+/**
+ * Memory game class, original deck of 52 has been squashed for mobile.
+ * Basically just a deck of cards, order and pairs can be saved/loaded.
+ */
 public class Memory {
 
     private static final int DECK_SIZE = 26;

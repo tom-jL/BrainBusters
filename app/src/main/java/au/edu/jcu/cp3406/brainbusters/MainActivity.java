@@ -40,13 +40,17 @@ public class MainActivity extends AppCompatActivity {
 
         GamePagerAdapter gamePagerAdapter = new GamePagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         ViewPager pager = findViewById(R.id.gamePager);
-        pager.setOffscreenPageLimit(3);
         pager.setAdapter(gamePagerAdapter);
-        pager.setPageTransformer(true, new CubeOutTransformer());
+        pager.setPageTransformer(true, new AccordionTransformer());
+        pager.setOffscreenPageLimit(3);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(pager);
 
+    }
+
+    public AudioManager getAudioManager() {
+        return audioManager;
     }
 
     public void showStats(View view) {
@@ -58,17 +62,6 @@ public class MainActivity extends AppCompatActivity {
         statsDatabaseHelper.insertStat(id);
     }
 
-    public void playWin() {
-        audioManager.playSound(R.raw.win);
-    }
-
-    public void playShuffle() {
-        audioManager.playSound(R.raw.shuffle);
-    }
-
-    public void playExplode() {
-        audioManager.playSound(R.raw.explode);
-    }
 }
 
 class GamePagerAdapter extends FragmentPagerAdapter {
@@ -102,7 +95,6 @@ class GamePagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-
                 return new SodukuFragment();
             case 1:
                 return new MinesweeperFragment();
